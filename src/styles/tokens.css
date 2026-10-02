@@ -1,0 +1,198 @@
+/* R5 Global — design tokens. Signed off. Do not add colours. */
+
+/* Fonts are self-hosted via @fontsource (imported in Base.astro) instead of the
+   Google Fonts @import — removes a render-blocking third-party request. */
+
+:root {
+  /* ---- Colour: four, and nothing else ---- */
+  --r5-orange:    #FF5A1F;
+  --r5-charcoal:  #2A2D32;
+  --r5-grey:      #6F7784;
+  --r5-white:     #F6F5F2;
+
+  /* Tints of charcoal — for use on soft white */
+  --r5-c-70: rgba(42, 45, 50, 0.70);
+  --r5-c-45: rgba(42, 45, 50, 0.45);
+  --r5-c-12: rgba(42, 45, 50, 0.12);
+  --r5-c-06: rgba(42, 45, 50, 0.06);
+  --r5-c-03: rgba(42, 45, 50, 0.03);
+
+  /* Tints of soft white — for use on charcoal */
+  --r5-w-70: rgba(246, 245, 242, 0.70);
+  --r5-w-45: rgba(246, 245, 242, 0.45);
+  --r5-w-12: rgba(246, 245, 242, 0.12);
+  --r5-w-06: rgba(246, 245, 242, 0.06);
+
+  /* ---- Semantic ---- */
+  --r5-page:            var(--r5-white);
+  --r5-text:            var(--r5-charcoal);
+  --r5-text-secondary:  var(--r5-grey);
+  --r5-text-muted:      var(--r5-c-45);
+  --r5-border:          var(--r5-c-12);
+  --r5-surface-card:    var(--r5-c-03);
+  --r5-surface-dark:    var(--r5-charcoal);
+  --r5-accent:          var(--r5-orange);
+
+  /* ---- Type ---- */
+  --r5-sans: 'DM Sans Variable', 'DM Sans', system-ui, -apple-system, sans-serif;
+  --r5-mono: 'DM Mono', ui-monospace, monospace;
+
+  --r5-h1: 60px;  --r5-h1-lh: 1.06;  --r5-h1-ls: -0.01em;
+  --r5-h2: 42px;  --r5-h2-lh: 1.12;  --r5-h2-ls: -0.01em;
+  --r5-h3: 30px;  --r5-h3-lh: 1.25;  --r5-h3-ls: -0.005em;
+  --r5-lead: 21px;    --r5-lead-lh: 1.60;
+  --r5-body: 16px;    --r5-body-lh: 1.70;
+  --r5-caption: 13px; --r5-caption-lh: 1.55; --r5-caption-ls: 0.01em;
+  --r5-label: 12px;   --r5-label-ls: 0.08em;
+  --r5-data: 14px;    --r5-data-ls: 0.02em;
+  --r5-micro: 11px;   --r5-micro-ls: 0.06em;
+
+  /* ---- Layout ---- */
+  --r5-container: 1248px;
+  --r5-gutter: 96px;
+  --r5-gutter-mobile: 16px;
+  --r5-section: 88px;
+
+  /* ---- Motion ---- */
+  --r5-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --r5-dur-fast: 180ms;
+  --r5-dur-base: 320ms;
+  --r5-dur-slow: 2400ms;
+}
+
+@media (max-width: 820px) {
+  :root {
+    --r5-h1: 38px;
+    --r5-h2: 30px;
+    --r5-h3: 23px;
+    --r5-lead: 18px;
+    --r5-gutter: var(--r5-gutter-mobile);
+    --r5-section: 56px;
+  }
+}
+
+/* ---- Base ---- */
+body {
+  background: var(--r5-page);
+  color: var(--r5-text);
+  font-family: var(--r5-sans);
+  font-size: var(--r5-body);
+  line-height: var(--r5-body-lh);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Patterns the system depends on ---- */
+
+/* Mono label / section kicker */
+.r5-label {
+  font-family: var(--r5-mono);
+  font-size: var(--r5-label);
+  letter-spacing: var(--r5-label-ls);
+  text-transform: uppercase;
+  color: var(--r5-accent);
+}
+
+/* Primary button: orange fill, CHARCOAL text — not white */
+.r5-btn {
+  display: inline-block;
+  padding: 14px 24px;
+  background: var(--r5-accent);
+  color: var(--r5-charcoal);
+  font-family: var(--r5-mono);
+  font-size: var(--r5-label);
+  letter-spacing: var(--r5-label-ls);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  transition: filter var(--r5-dur-fast) var(--r5-ease);
+}
+.r5-btn:hover  { filter: brightness(1.10); }
+.r5-btn:active { filter: brightness(0.88); }
+
+.r5-btn--ghost {
+  background: transparent;
+  color: var(--r5-text);
+  border: 1px solid var(--r5-border);
+}
+
+/* Link on light: charcoal text + orange dot. Never orange body text. */
+.r5-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--r5-text);
+  text-decoration: none;
+  font-family: var(--r5-mono);
+  font-size: var(--r5-micro);
+  letter-spacing: var(--r5-micro-ls);
+  text-transform: uppercase;
+}
+.r5-link::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--r5-accent);
+  flex: none;
+}
+
+/* Live status device */
+.r5-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--r5-mono);
+  font-size: var(--r5-micro);
+  letter-spacing: var(--r5-micro-ls);
+  text-transform: uppercase;
+  color: var(--r5-text-secondary);
+}
+.r5-status__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--r5-accent);
+  flex: none;
+}
+.r5-status__dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--r5-accent);
+  animation: r5-pulse 1.8s ease-out infinite;
+}
+@keyframes r5-pulse {
+  0%   { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Card — square corners, hairline border */
+.r5-card {
+  background: var(--r5-surface-card);
+  border: 1px solid var(--r5-border);
+  border-radius: 0;
+  padding: 24px;
+}
+.r5-card--dark {
+  background: var(--r5-surface-dark);
+  border-color: transparent;
+  color: var(--r5-white);
+}
+.r5-card--dark p { color: var(--r5-w-70); }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--r5-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

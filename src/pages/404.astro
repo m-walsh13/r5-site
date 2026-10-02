@@ -1,0 +1,36 @@
+---
+import { link } from '../lib/link';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Ring from '../components/Ring.astro';
+---
+<Base title="Page not found | R5 Global" description="The page you're looking for has moved or doesn't exist.">
+  <section class="nf">
+    <div class="container nf__grid">
+      <div class="nf__copy">
+        <p class="label accent">Error / 404</p>
+        <h1 class="h1">Nothing to see here.</h1>
+        <p class="lead">In our line of work, that's usually good news. The page you're after has moved, or never existed.</p>
+        <div class="btn-row">
+          <Button href={link('/')}>Back to home</Button>
+          <Button href={link('/contact/')} variant="ghost">Contact us</Button>
+        </div>
+      </div>
+      <div class="nf__ring" aria-hidden="true">
+        <Ring bearings>
+          <span class="nf__code">404<small class="micro muted">Position unknown</small></span>
+        </Ring>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { min-height: calc(100vh - var(--r5-header-h)); display: grid; align-items: center; padding: 48px 0 var(--r5-section); }
+  .nf__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: center; }
+  .nf__copy { display: grid; gap: 24px; justify-items: start; }
+  .nf__copy .lead { max-width: 38ch; }
+  .nf__ring { width: min(100%, 440px); justify-self: end; padding: 28px; }
+  .nf__code { display: grid; gap: 10px; justify-items: center; font-size: clamp(64px, 9vw, 112px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+  @media (max-width: 900px) { .nf__grid { grid-template-columns: 1fr; } .nf__ring { justify-self: center; width: min(100%, 320px); order: -1; } }
+</style>

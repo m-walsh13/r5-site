@@ -1,0 +1,17 @@
+---
+import Arrow from './Arrow.astro';
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ghost';
+  size?: 'md' | 'sm';
+  onDark?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'primary', size = 'md', onDark = false, class: className = '', ...rest } = Astro.props;
+const cls = ['btn', variant === 'ghost' && 'btn--ghost', size === 'sm' && 'btn--sm', onDark && 'btn--on-dark', className].filter(Boolean).join(' ');
+---
+<a href={href} class={cls} {...rest}>
+  <span><slot /></span>
+  <span class="btn__icon" aria-hidden="true"><Arrow /><Arrow /></span>
+</a>

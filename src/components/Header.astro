@@ -1,0 +1,207 @@
+---
+import { link } from '../lib/link';
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import Status from './Status.astro';
+import { nav, contactHref, site } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path.startsWith(href);
+---
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a href={link('/')} class="site-header__logo" aria-label="R5 Global — home">
+      <Logo size={48} twoTone label="R5 Global" />
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} class="site-nav__link" aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__end">
+      <Button href={contactHref} size="sm" class="site-header__cta" aria-current={isActive(contactHref) ? 'page' : undefined}>Contact us</Button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span class="menu-toggle__dots" aria-hidden="true"><i></i><i></i></span>
+        <span class="menu-toggle__label" data-menu-label>Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu aria-label="Menu" role="dialog" aria-modal="true" inert>
+  <div class="container mobile-menu__inner">
+    <nav aria-label="Mobile">
+      <ol class="mobile-menu__list">
+        <li style="--i:0"><a href={link('/')} aria-current={path === link('/') ? 'page' : undefined}>Home</a></li>
+        {nav.map((item, i) => (
+          <li style={`--i:${i + 1}`}>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+    <div class="mobile-menu__foot" style="--i:5">
+      <Button href={contactHref}>Contact us</Button>
+      <a class="mobile-menu__phone data" href={site.phoneHref}>{site.phone}</a>
+      <Status />
+    </div>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    height: var(--r5-header-h);
+    background: transparent;
+    transition: background-color var(--r5-dur-base) var(--r5-ease), box-shadow var(--r5-dur-base) var(--r5-ease), transform var(--r5-dur-slide) var(--r5-ease-out);
+  }
+  /* Tucks away on the way down, returns on the way up. The sub nav reads the same flag. */
+  :global(html[data-header-hidden]) .site-header { transform: translateY(-100%); }
+  .site-header[data-scrolled] {
+    background: color-mix(in srgb, var(--r5-white) 86%, transparent);
+    backdrop-filter: saturate(1.2) blur(14px);
+    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+    box-shadow: 0 1px 0 var(--r5-border);
+  }
+  :global(html.menu-open) .site-header { background: var(--r5-white); box-shadow: 0 1px 0 var(--r5-border); }
+
+  .site-header__inner { height: 100%; display: flex; align-items: center; gap: 32px; }
+  .site-header__logo { color: var(--r5-charcoal); flex: none; border-radius: 50%; }
+
+  .site-nav { margin-left: auto; }
+  .site-nav ul { display: flex; gap: 4px; }
+  .site-nav__link {
+    position: relative; display: inline-flex; align-items: center; height: 40px; padding: 0 14px;
+    border-radius: var(--r5-pill);
+    font: 500 var(--r5-label)/1 var(--r5-mono); letter-spacing: var(--r5-label-ls); text-transform: uppercase;
+    text-decoration: none; color: var(--r5-charcoal);
+    transition: background-color var(--r5-dur-fast) var(--r5-ease), padding var(--r5-dur-base) var(--r5-ease-out);
+  }
+  .site-nav__link::before {
+    content: ''; position: absolute; left: 12px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px;
+    border-radius: 50%; background: var(--r5-accent);
+    transform: scale(0); transition: transform var(--r5-dur-base) var(--r5-ease-out);
+  }
+  .site-nav__link:hover { background: var(--r5-c-06); }
+  .site-nav__link:hover, .site-nav__link[aria-current='page'] { padding-left: 26px; }
+  .site-nav__link:hover::before, .site-nav__link[aria-current='page']::before { transform: scale(1); }
+
+  .site-header__end { display: flex; align-items: center; gap: 20px; }
+
+  .menu-toggle {
+    display: none; align-items: center; gap: 10px; height: 44px; padding: 0 18px 0 14px;
+    border: 0; border-radius: var(--r5-pill); background: var(--r5-c-06);
+    font: 500 var(--r5-label)/1 var(--r5-mono); letter-spacing: var(--r5-label-ls); text-transform: uppercase;
+  }
+  .menu-toggle__dots { position: relative; width: 16px; height: 16px; }
+  .menu-toggle__dots i {
+    position: absolute; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%;
+    background: var(--r5-charcoal); transition: transform var(--r5-dur-base) var(--r5-ease-out), background-color var(--r5-dur-fast);
+  }
+  .menu-toggle__dots i:first-child { left: 0; }
+  .menu-toggle__dots i:last-child { right: 0; }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__dots i:first-child { transform: translateX(5px); background: var(--r5-accent); }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__dots i:last-child { transform: translateX(-5px) scale(0.3); }
+
+  @media (max-width: 980px) {
+    .site-nav, .site-header__cta { display: none; }
+    .menu-toggle { display: inline-flex; }
+    .site-header__end { margin-left: auto; }
+  }
+
+  /* Mobile menu — opens as a circle from the toggle, the ring doing the work */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 40; padding-top: var(--r5-header-h);
+    background: var(--r5-white); overflow-y: auto; overscroll-behavior: contain;
+    clip-path: circle(0 at calc(100% - 60px) calc(var(--r5-header-h) / 2));
+    visibility: hidden;
+    transition: clip-path 650ms var(--r5-ease-out), visibility 0s linear 650ms;
+  }
+  :global(html.menu-open) .mobile-menu {
+    clip-path: circle(150% at calc(100% - 60px) calc(var(--r5-header-h) / 2));
+    visibility: visible; transition: clip-path 750ms var(--r5-ease-out), visibility 0s;
+  }
+  .mobile-menu__inner { min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding-block: 24px 32px; }
+  .mobile-menu__list li { border-bottom: 1px solid var(--r5-border); }
+  .mobile-menu__list a {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 0;
+    font-size: clamp(30px, 8vw, 44px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1;
+    text-decoration: none;
+  }
+  .mobile-menu__list a::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--r5-accent); transform: scale(0); transition: transform var(--r5-dur-base) var(--r5-ease-out); }
+  .mobile-menu__list a[aria-current='page']::after { transform: scale(1); }
+  .mobile-menu__list li, .mobile-menu__foot {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 400ms var(--r5-ease-out), transform 600ms var(--r5-ease-out);
+  }
+  :global(html.menu-open) .mobile-menu__list li, :global(html.menu-open) .mobile-menu__foot {
+    opacity: 1; transform: none; transition-delay: calc(120ms + var(--i) * 55ms);
+  }
+  .mobile-menu__foot { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .mobile-menu__phone { text-decoration: none; font-size: 18px; }
+  @media (min-width: 981px) { .mobile-menu { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu, :global(html.menu-open) .mobile-menu { transition: none; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const label = document.querySelector<HTMLElement>('[data-menu-label]')!;
+  const menu = document.querySelector<HTMLElement>('[data-menu]')!;
+  const root = document.documentElement;
+
+  const setMenu = (open: boolean) => {
+    root.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Close' : 'Menu';
+    menu.inert = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+  };
+  toggle.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
+  menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.classList.contains('menu-open')) { setMenu(false); toggle.focus(); }
+  });
+  matchMedia('(min-width: 981px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
+
+  // Semi-sticky header. One flag on <html> drives both the header and the
+  // pillar-page sub nav, so the two always move together.
+  // Direction must be held for a few pixels before it flips — no flicker.
+  const THRESHOLD = 12;
+  const TOP_ZONE = 240;
+  let lastY = scrollY;
+  let travel = 0;
+  let ticking = false;
+  const setHidden = (hide: boolean) => {
+    if (root.hasAttribute('data-header-hidden') !== hide) root.toggleAttribute('data-header-hidden', hide);
+  };
+  const onScroll = () => {
+    const y = scrollY;
+    const dy = y - lastY;
+    lastY = y;
+    header.toggleAttribute('data-scrolled', y > 8);
+    if (y < TOP_ZONE || root.classList.contains('menu-open') || header.contains(document.activeElement)) {
+      travel = 0;
+      setHidden(false);
+    } else if (dy !== 0) {
+      travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy;
+      if (travel > THRESHOLD) setHidden(true);
+      else if (travel < -THRESHOLD) setHidden(false);
+    }
+    ticking = false;
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+  header.addEventListener('focusin', () => setHidden(false));
+</script>

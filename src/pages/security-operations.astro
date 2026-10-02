@@ -1,0 +1,116 @@
+---
+// Security Operations — per sitemap: Overview · 4 services · 24/7 + Confidentiality
+// · Case studies · Contact us · FAQs
+import Base from '../layouts/Base.astro';
+import PillarHero from '../components/PillarHero.astro';
+import ServiceRail from '../components/ServiceRail.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import CutRule from '../components/CutRule.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CaseStudies from '../components/CaseStudies.astro';
+import ContactBand from '../components/ContactBand.astro';
+import Faqs from '../components/Faqs.astro';
+import Ring from '../components/Ring.astro';
+import Status from '../components/Status.astro';
+import Img from '../components/Img.astro';
+import { securityOperations } from '../data/services';
+import { operationsPage as page } from '../data/pages';
+import { faqSchema, servicesSchema, breadcrumbSchema } from '../data/schema';
+
+const schema = [
+  servicesSchema('Security operations services', '/security-operations/', securityOperations),
+  faqSchema(page.faqs),
+  breadcrumbSchema('Security Operations', '/security-operations/'),
+];
+---
+<Base title={page.meta.title} description={page.meta.description} schema={schema}>
+  <PillarHero
+    crumb="Security Operations"
+    kicker={page.hero.kicker}
+    title={page.hero.title}
+    lead={page.hero.lead}
+    body={page.hero.body}
+    image="lobby"
+    services={securityOperations}
+    count="04"
+  >
+    <p class="body body-secondary">{page.hero.sectorsLine}</p>
+  </PillarHero>
+
+  <div class="services-wrap">
+    <ServiceRail services={securityOperations} label="Security Operations services" />
+    {securityOperations.map((s, i) => (
+      <Fragment>
+        {i > 0 && <CutRule at={i % 2 ? 38 : 62} />}
+        <ServiceBlock service={s} index={i} line="Security Operations" reverse={i % 2 === 1} />
+      </Fragment>
+    ))}
+  </div>
+
+  <!-- 24/7 Deployment + Confidentiality -->
+  <section class="section always" aria-labelledby="always-title" data-services-end>
+    <div class="container">
+      <SectionHead kicker={page.always.kicker} title={page.always.title} id="always-title" />
+      <div class="always__grid" data-reveal>
+        <article class="card always__deployed">
+          <div class="always__ring">
+            <Ring image="londonDusk" sizes="(max-width: 900px) 70vw, 24vw">
+            </Ring>
+          </div>
+          <div class="always__copy">
+            <Status />
+            <h3 class="h3">{page.always.deployed.title}</h3>
+            <p class="body body-secondary">{page.always.deployed.text}</p>
+            <dl class="always__stats">
+              <div><dt class="micro muted">Hours</dt><dd>24</dd></div>
+              <div><dt class="micro muted">Days</dt><dd>7</dd></div>
+              <div><dt class="micro muted">Per year</dt><dd>365</dd></div>
+            </dl>
+          </div>
+        </article>
+        <article class="card card--dark on-dark always__conf">
+          <span class="label accent">Need to know</span>
+          <h3 class="h3">{page.always.confidential.title}</h3>
+          <p class="body body-secondary">{page.always.confidential.text}</p>
+          <ul class="always__file micro" aria-label="What a case file looks like from the outside">
+            <li><span>Client</span><i></i></li>
+            <li><span>Site</span><i style="width:62%"></i></li>
+            <li><span>Principal</span><i style="width:48%"></i></li>
+            <li><span>Sector</span><b>Hospitality</b></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--band" aria-labelledby="cases-title">
+    <div class="container">
+      <SectionHead kicker={page.cases.kicker} title={page.cases.title} lead={page.cases.lead} id="cases-title" />
+      <CaseStudies item={page.cases.item} />
+    </div>
+  </section>
+
+  <ContactBand line="operations" kicker={page.contact.kicker} title={page.contact.title} lead={page.contact.lead} />
+
+  <Faqs title="Security Operations FAQs" items={page.faqs} />
+</Base>
+
+<style>
+  .services-wrap { position: relative; }
+  .always__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; }
+  .always__deployed { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 40px; }
+  .always__ring { padding: 18px; }
+  .always__copy { display: grid; gap: 16px; }
+  .always__stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 12px; border-top: 1px solid var(--r5-border); }
+  .always__stats div { padding-top: 14px; display: grid; gap: 4px; }
+  .always__stats div + div { border-left: 1px solid var(--r5-border); padding-left: 16px; }
+  .always__stats dd { font-size: var(--r5-h3); font-weight: 600; line-height: 1; }
+  .always__conf { display: flex; flex-direction: column; gap: 16px; padding: 40px; }
+  .always__file { display: grid; gap: 0; margin-top: auto; padding-top: 24px; }
+  .always__file li { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-top: 1px solid var(--r5-w-12); color: var(--r5-w-45); }
+  .always__file span { width: 80px; flex: none; }
+  .always__file i { display: block; width: 70%; height: 12px; border-radius: 3px; background: var(--r5-w-12); }
+  .always__file b { font-weight: 400; color: var(--r5-white); }
+  @media (max-width: 1100px) { .always__deployed { grid-template-columns: 1fr; } .always__ring { max-width: 320px; } }
+  @media (max-width: 900px) { .always__grid { grid-template-columns: 1fr; } .always__deployed, .always__conf { padding: 28px; } }
+</style>

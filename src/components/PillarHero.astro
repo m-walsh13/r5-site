@@ -1,0 +1,132 @@
+---
+import { link } from '../lib/link';
+// Overview section for a pillar page: positioning first, then the service index.
+import Button from './Button.astro';
+import Img from './Img.astro';
+import Kicker from './Kicker.astro';
+import type { Service } from '../data/services';
+import type { ImageKey } from '../data/images';
+import { bookHref } from '../data/site';
+
+interface Props {
+  crumb: string;
+  kicker: string;
+  title: string;
+  lead: string;
+  body: string;
+  image: ImageKey;
+  services: Service[];
+  count: string;
+}
+const { crumb, kicker, title, lead, body, image, services, count } = Astro.props;
+---
+<section class="phero" aria-labelledby="page-title">
+  <div class="container">
+    <nav class="phero__crumb micro" aria-label="Breadcrumb">
+      <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
+    </nav>
+
+    <div class="phero__top">
+      <div class="phero__copy">
+        <p class="label accent phero__kicker">{kicker}</p>
+        <h1 class="h1 phero__title" id="page-title">{title}</h1>
+        <p class="lead phero__lead">{lead}</p>
+        <div class="btn-row phero__cta">
+          <Button href={bookHref}>Speak to a consultant</Button>
+          <Button href="#services-index" variant="ghost">See the services</Button>
+        </div>
+      </div>
+      <figure class="phero__figure">
+        <div class="media media--cut phero__media">
+          <Img image={image} eager sizes="(max-width: 900px) 100vw, 42vw" width={1400} height={1600} />
+        </div>
+        <div class="phero__count" aria-hidden="true">
+          <span class="phero__count-n">{count}</span>
+          <span class="micro muted">Disciplines</span>
+        </div>
+      </figure>
+    </div>
+
+    <div class="phero__overview" id="services-index">
+      <div class="phero__body" data-reveal>
+        <Kicker label="Overview" />
+        <p class="phero__body-text">{body}</p>
+        <slot />
+      </div>
+      <ol class="phero__index" data-reveal>
+        {services.map((s, i) => (
+          <li>
+            <a href={`#${s.id}`}>
+              <span class="micro muted">{String(i + 1).padStart(2, '0')}</span>
+              <span class="phero__index-name">{s.name}</span>
+              <span class="phero__index-arrow" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 4.5V11H4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .phero { padding: 28px 0 var(--r5-section); }
+  .phero__crumb { display: flex; gap: 10px; color: var(--r5-text-secondary); margin-bottom: clamp(32px, 5vw, 64px); }
+  .phero__crumb a { text-decoration: none; }
+  .phero__crumb a:hover { color: var(--r5-charcoal); }
+  .phero__top { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: end; }
+  .phero__copy { display: grid; gap: 28px; justify-items: start; padding-bottom: 24px; }
+  .phero__title { max-width: 14ch; }
+  .phero__lead { max-width: 44ch; }
+  .phero__kicker, .phero__title, .phero__lead, .phero__cta { animation: phero-up 900ms var(--r5-ease-out) both; }
+  .phero__title { animation-delay: 80ms; }
+  .phero__lead { animation-delay: 200ms; }
+  .phero__cta { animation-delay: 320ms; }
+  .phero__figure { position: relative; animation: phero-in 1200ms var(--r5-ease-out) 120ms both; }
+  .phero__media { aspect-ratio: 5 / 6; }
+  .phero__media :global(img) { position: absolute; inset: 0; }
+  .phero__count {
+    position: absolute; left: -28px; bottom: 56px; z-index: 4;
+    display: grid; place-items: center; align-content: center; gap: 2px;
+    width: 116px; height: 116px; border-radius: 50%;
+    background: var(--r5-white); box-shadow: inset 0 0 0 1px var(--r5-border);
+  }
+  .phero__count::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; border: 1px solid var(--r5-charcoal); }
+  .phero__count-n { font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
+
+  .phero__overview { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; margin-top: var(--r5-section); padding-top: 48px; border-top: 1px solid var(--r5-border); }
+  .phero__body { display: grid; gap: 22px; align-content: start; }
+  .phero__body :global(.kicker) { margin-bottom: 0; }
+  .phero__body-text { font-size: 19px; line-height: 1.65; text-wrap: pretty; }
+  .phero__index { border-top: 1px solid var(--r5-border); }
+  .phero__index li { border-bottom: 1px solid var(--r5-border); }
+  .phero__index a {
+    position: relative; isolation: isolate; display: grid; grid-template-columns: 44px 1fr 40px; align-items: center; gap: 12px;
+    padding: 18px 16px 18px 12px; text-decoration: none; border-radius: var(--r5-radius-sm); overflow: hidden;
+  }
+  .phero__index a::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; background: var(--r5-c-06);
+    clip-path: polygon(0 0, 0 0, -12% 100%, -12% 100%);
+    transition: clip-path 480ms var(--r5-ease-out);
+  }
+  .phero__index a:hover::before { clip-path: polygon(0 0, 112% 0, 100% 100%, -12% 100%); }
+  .phero__index-name { font-size: 20px; font-weight: 500; letter-spacing: -0.005em; transition: transform var(--r5-dur-base) var(--r5-ease-out); }
+  .phero__index a:hover .phero__index-name { transform: translateX(6px); }
+  .phero__index-arrow { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--r5-border); transition: background-color var(--r5-dur-base), color var(--r5-dur-base), transform var(--r5-dur-base) var(--r5-ease-out); }
+  .phero__index-arrow svg { width: 13px; height: 13px; }
+  .phero__index a:hover .phero__index-arrow { background: var(--r5-accent); box-shadow: none; transform: rotate(-45deg); }
+
+  @keyframes phero-up { from { opacity: 0; transform: translateY(16px); } }
+  @keyframes phero-in { from { opacity: 0; transform: translateY(24px) scale(0.98); } }
+  @media (max-width: 900px) {
+    .phero__top, .phero__overview { grid-template-columns: 1fr; gap: 40px; }
+    .phero__media { aspect-ratio: 4 / 3; }
+    .phero__count { left: auto; right: 16px; bottom: -40px; width: 96px; height: 96px; }
+    .phero__count-n { font-size: 28px; }
+    .phero__index-name { font-size: 17px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .phero__kicker, .phero__title, .phero__lead, .phero__cta, .phero__figure { animation: none; }
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+import { link } from '../lib/link';
+import SectionHead from './SectionHead.astro';
+import type { Faq } from '../data/pages';
+interface Props { items: Faq[]; title: string }
+const { items, title } = Astro.props;
+---
+<section class="section" aria-labelledby="faqs">
+  <div class="container faqs">
+    <div class="faqs__head">
+      <SectionHead kicker="FAQs" title={title} id="faqs" />
+      <p class="caption muted">Something we haven't covered? <a href={link('/contact/#enquiry')}>Ask us directly.</a></p>
+    </div>
+    <div class="faqs__list" data-reveal>
+      {items.map((f) => (
+        <details class="faq">
+          <summary>
+            <span class="h4">{f.q}</span>
+            <span class="faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq__answer"><p class="body body-secondary">{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faqs { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+  .faqs__head { position: sticky; top: calc(var(--r5-header-h) + 32px); }
+  .faqs__head :global(.section-head) { grid-template-columns: 1fr; margin-bottom: 16px; }
+  .faqs__head a { color: var(--r5-charcoal); }
+  .faqs__list { border-top: 1px solid var(--r5-border); }
+  .faq { border-bottom: 1px solid var(--r5-border); }
+  .faq summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    padding: 26px 4px; cursor: pointer; list-style: none; border-radius: var(--r5-radius-sm);
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq__icon { position: relative; flex: none; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--r5-border); transition: background-color var(--r5-dur-fast), transform var(--r5-dur-base) var(--r5-ease-out); }
+  .faq__icon::before, .faq__icon::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; margin: -0.75px 0 0 -6px; background: var(--r5-charcoal); transition: transform var(--r5-dur-base) var(--r5-ease-out); }
+  .faq__icon::after { transform: rotate(90deg); }
+  .faq summary:hover .faq__icon { background: var(--r5-c-06); }
+  .faq[open] .faq__icon { background: var(--r5-accent); box-shadow: none; }
+  .faq[open] .faq__icon::after { transform: rotate(0deg); }
+  .faq__answer { padding: 0 64px 28px 4px; max-width: 70ch; }
+  .faq[open] .faq__answer { animation: faq-in 420ms var(--r5-ease-out); }
+  @keyframes faq-in { from { opacity: 0; transform: translateY(-6px); } }
+  @media (max-width: 900px) {
+    .faqs { grid-template-columns: 1fr; gap: 16px; }
+    .faqs__head { position: static; }
+    .faq__answer { padding-right: 0; }
+  }
+</style>

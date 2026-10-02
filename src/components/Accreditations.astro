@@ -1,0 +1,33 @@
+---
+// SIA / ACS / ICO — the only accreditations R5 may claim. Official marks to be
+// supplied; until then each sits in a ring monogram.
+import { accreditations } from '../data/site';
+interface Props { detailed?: boolean }
+const { detailed = false } = Astro.props;
+---
+<ul class={`accr ${detailed ? 'accr--detailed' : ''}`} data-reveal>
+  {accreditations.map((a) => (
+    <li class={detailed ? 'card' : ''}>
+      <span class="accr__mark" aria-hidden="true">{a.code}</span>
+      <div class="accr__text">
+        <span class="h4">{a.name}</span>
+        {detailed && <p class="body body-secondary">{a.detail}</p>}
+      </div>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .accr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .accr li { display: flex; gap: 18px; align-items: center; }
+  .accr__mark {
+    position: relative; flex: none; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px var(--r5-charcoal);
+    font: 500 13px/1 var(--r5-mono); letter-spacing: 0.08em;
+  }
+  .accr__mark::after { content: ''; position: absolute; top: 2px; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--r5-accent); }
+  .accr__text { display: grid; gap: 8px; }
+  .accr--detailed li { flex-direction: column; align-items: flex-start; gap: 28px; padding: 32px; }
+  .accr--detailed .accr__mark { width: 96px; height: 96px; font-size: 18px; }
+  @media (max-width: 900px) { .accr { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,41 @@
+---
+// Sectors in place of a logo wall. Runs slowly, like a departures board;
+// pauses on hover, and sits still for reduced motion.
+import Img from './Img.astro';
+import { sectors } from '../data/site';
+const loop = [...sectors, ...sectors];
+---
+<div class="marquee" role="region" aria-label="Sectors we work in">
+  <ul class="sr-only">{sectors.map((s) => <li>{s.name}</li>)}</ul>
+  <div class="marquee__track" aria-hidden="true">
+    {loop.map((s) => (
+      <div class="marquee__item">
+        <span class="marquee__img media"><Img image={s.image} sizes="64px" width={128} height={128} /></span>
+        <span class="marquee__name">{s.name}</span>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee { position: relative; overflow: hidden; padding-block: 8px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marquee__track { display: flex; gap: 12px; width: max-content; animation: marquee 70s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  .marquee__item {
+    display: inline-flex; align-items: center; gap: 14px; height: 72px; padding: 0 26px 0 8px;
+    border-radius: var(--r5-pill); box-shadow: inset 0 0 0 1px var(--r5-border); background: var(--r5-white);
+    transition: background-color var(--r5-dur-base) var(--r5-ease);
+  }
+  .marquee__item:hover { background: var(--r5-c-03); }
+  .marquee__img { width: 56px; height: 56px; border-radius: 50%; flex: none; }
+  .marquee__img :global(img) { width: 100%; height: 100%; }
+  .marquee__name { font-size: 18px; font-weight: 500; white-space: nowrap; }
+  @keyframes marquee { to { transform: translateX(calc(-50% - 6px)); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { -webkit-mask-image: none; mask-image: none; }
+    .marquee__track { animation: none; flex-wrap: wrap; width: auto; padding-inline: var(--r5-gutter); max-width: var(--r5-maxw); margin-inline: auto; }
+    .marquee__item:nth-child(n + 10) { display: none; }
+  }
+</style>

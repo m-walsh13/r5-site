@@ -1,0 +1,12 @@
+---
+// A hairline that steps down once at the angle of the R's leg (tan ≈ 0.75).
+interface Props { at?: number }
+const { at = 62 } = Astro.props;
+---
+<div class="container" aria-hidden="true">
+  <div class="cut-rule" style={`--at:${at}%`}>
+    <span></span>
+    <svg viewBox="0 0 9 12" width="9" height="12"><path d="M0 0.5 9 11.5" /></svg>
+    <span></span>
+  </div>
+</div>

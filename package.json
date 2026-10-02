@@ -1,0 +1,20 @@
+{
+  "name": "r5-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
+    "astro": "^7.3.5"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}

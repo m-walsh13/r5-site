@@ -1,0 +1,282 @@
+---
+import { link } from '../lib/link';
+// Contact — per sitemap: Book a call function · Contact form (segmented by service)
+import Base from '../layouts/Base.astro';
+import BookingPanel from '../components/BookingPanel.astro';
+import Kicker from '../components/Kicker.astro';
+import Status from '../components/Status.astro';
+import Arrow from '../components/Arrow.astro';
+import { contactPage as page } from '../data/pages';
+import { site } from '../data/site';
+import { consulting, securityOperations } from '../data/services';
+import { breadcrumbSchema } from '../data/schema';
+
+const segments = [
+  { value: 'consulting', title: 'Consulting', text: 'Testing, investigations, risk assessment, tracing' },
+  { value: 'operations', title: 'Security Operations', text: 'Guarding, protection, patrols and response' },
+  { value: 'unsure', title: 'Not sure yet', text: "Tell us the problem — we'll work out the rest" },
+];
+const serviceOptions = [
+  ...consulting.map((s) => ({ ...s, line: 'consulting' })),
+  ...securityOperations.map((s) => ({ ...s, line: 'operations' })),
+];
+const timings = ['Planning ahead', 'Within a month', 'Urgent'];
+---
+<Base title={page.meta.title} description={page.meta.description} schema={[breadcrumbSchema('Contact', '/contact/')]}>
+  <!-- 01 · Book a call -->
+  <section class="chero" id="book" aria-labelledby="page-title">
+    <div class="container">
+      <nav class="chero__crumb micro" aria-label="Breadcrumb">
+        <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">Contact</span>
+      </nav>
+      <div class="chero__grid">
+        <div class="chero__copy">
+          <p class="label accent">{page.book.kicker}</p>
+          <h1 class="h1" id="page-title">{page.book.title}</h1>
+          <p class="lead">{page.book.lead}</p>
+          <ul class="chero__direct">
+            <li><span class="micro muted">Direct line</span><a class="chero__phone" href={site.phoneHref}>{site.phone}</a></li>
+            <li><span class="micro muted">Based</span><span>London · Operating globally</span></li>
+            <li><span class="micro muted">Status</span><Status /></li>
+          </ul>
+        </div>
+        <BookingPanel />
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · Enquiry form -->
+  <section class="section section--band" id="enquiry" aria-labelledby="enquiry-title">
+    <div class="container enq-grid">
+      <div class="enq-intro" data-reveal>
+        <Kicker label={page.form.kicker} />
+        <h2 class="h2" id="enquiry-title">{page.form.title}</h2>
+        <p class="lead">{page.form.lead}</p>
+        <p class="caption muted enq-intro__note">
+          Everything you send is treated as confidential. R5 Global is ICO registered.
+        </p>
+      </div>
+
+      <!-- PLACEHOLDER: no form backend yet. Point `action` at the chosen handler
+           (CRM, Formspree, Netlify Forms, etc.) — segmentation fields are ready. -->
+      <form class="enq card" action="#" method="post" novalidate data-enquiry>
+        <div class="enq__steps" data-steps>
+          <fieldset class="enq__set">
+            <legend class="enq__legend"><span class="micro accent">01</span><span class="label">What's this about?</span></legend>
+            <div class="enq__segments">
+              {segments.map((s) => (
+                <label class="seg">
+                  <input type="radio" name="line" value={s.value} required />
+                  <span class="seg__ring" aria-hidden="true"></span>
+                  <span class="seg__title">{s.title}</span>
+                  <span class="caption muted">{s.text}</span>
+                </label>
+              ))}
+            </div>
+            <p class="enq__error micro" data-error="line" hidden>Choose one so we route this to the right person.</p>
+          </fieldset>
+
+          <fieldset class="enq__set" data-services hidden>
+            <legend class="enq__legend"><span class="micro accent">02</span><span class="label">Which services?</span><span class="micro muted">Optional</span></legend>
+            <div class="chip-row enq__chips">
+              {serviceOptions.map((s) => (
+                <label class="pick" data-line={s.line}>
+                  <input type="checkbox" name="services" value={s.id} />
+                  <span>{s.name}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset class="enq__set">
+            <legend class="enq__legend"><span class="micro accent">03</span><span class="label">Your details</span></legend>
+            <div class="enq__fields">
+              <label class="field"><span class="micro">Name *</span><input type="text" name="name" autocomplete="name" required /></label>
+              <label class="field"><span class="micro">Organisation</span><input type="text" name="organisation" autocomplete="organization" /></label>
+              <label class="field"><span class="micro">Role</span><input type="text" name="role" autocomplete="organization-title" placeholder="e.g. Head of Security" /></label>
+              <label class="field"><span class="micro">Email *</span><input type="email" name="email" autocomplete="email" required /></label>
+              <label class="field field--wide"><span class="micro">Phone</span><input type="tel" name="phone" autocomplete="tel" /></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="enq__set">
+            <legend class="enq__legend"><span class="micro accent">04</span><span class="label">How soon?</span></legend>
+            <div class="chip-row">
+              {timings.map((t, i) => (
+                <label class="pick"><input type="radio" name="timing" value={t} checked={i === 0} /><span>{t}</span></label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset class="enq__set">
+            <legend class="enq__legend"><span class="micro accent">05</span><span class="label">What's the situation?</span></legend>
+            <label class="field field--wide">
+              <span class="sr-only">Message *</span>
+              <textarea name="message" rows="5" required placeholder="Give us the outline. Keep the sensitive detail for the call if you prefer."></textarea>
+            </label>
+          </fieldset>
+
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            <span class="caption">I agree to R5 Global using these details to respond to my enquiry.</span>
+          </label>
+
+          <div class="enq__submit">
+            <button type="submit" class="btn">
+              <span>Send enquiry</span>
+              <span class="btn__icon" aria-hidden="true"><Arrow /><Arrow /></span>
+            </button>
+            <p class="micro muted">Read by a consultant, not a sales funnel.</p>
+          </div>
+          <p class="enq__error micro" data-error="form" role="alert" hidden>A few required fields still need filling in.</p>
+        </div>
+
+        <div class="enq__done" data-done hidden tabindex="-1">
+          <svg class="enq__done-ring" viewBox="0 0 80 80" aria-hidden="true">
+            <circle cx="40" cy="40" r="34" pathLength="1" />
+            <path d="M28 41l8 8 16-17" pathLength="1" />
+          </svg>
+          <h3 class="h2">{page.form.success.title}</h3>
+          <p class="lead">{page.form.success.text}</p>
+          <p class="data">Urgent? Call <a href={site.phoneHref}>{site.phone}</a></p>
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chero { padding: 28px 0 var(--r5-section); }
+  .chero__crumb { display: flex; gap: 10px; color: var(--r5-text-secondary); margin-bottom: clamp(32px, 5vw, 64px); }
+  .chero__crumb a { text-decoration: none; }
+  .chero__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: center; }
+  .chero__copy { display: grid; gap: 24px; animation: c-up 900ms var(--r5-ease-out) both; }
+  .chero__copy .h1 { max-width: 10ch; }
+  .chero__direct { display: grid; margin-top: 12px; border-top: 1px solid var(--r5-border); }
+  .chero__direct li { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--r5-border); }
+  .chero__phone { font-size: 22px; font-weight: 500; text-decoration: none; }
+  .chero__phone:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .chero__grid > :global(.booking) { animation: c-up 1000ms var(--r5-ease-out) 160ms both; }
+  @keyframes c-up { from { opacity: 0; transform: translateY(16px); } }
+
+  .enq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+  .enq-intro { display: grid; gap: 22px; position: sticky; top: calc(var(--r5-header-h) + 32px); }
+  .enq-intro :global(.kicker) { margin-bottom: 4px; }
+
+  .enq { background: var(--r5-white); padding: 40px; }
+  .enq__steps { display: grid; gap: 36px; }
+  .enq__set { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: 16px; }
+  .enq__legend { display: flex; align-items: center; gap: 12px; padding: 0; margin-bottom: 16px; }
+  .enq__segments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .seg {
+    position: relative; display: grid; gap: 6px; align-content: start; padding: 18px 18px 20px; min-height: 132px;
+    border-radius: var(--r5-radius); box-shadow: inset 0 0 0 1px var(--r5-border); cursor: pointer;
+    transition: box-shadow var(--r5-dur-fast) var(--r5-ease), background-color var(--r5-dur-fast);
+  }
+  .seg:hover { background: var(--r5-c-03); }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg__ring { position: relative; width: 22px; height: 22px; margin-bottom: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--r5-c-45); transition: box-shadow var(--r5-dur-fast); }
+  .seg__ring::after { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: var(--r5-accent); transform: scale(0); transition: transform var(--r5-dur-base) var(--r5-ease-out); }
+  .seg__title { font-size: 17px; font-weight: 600; }
+  .seg:has(input:checked) { box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); }
+  .seg:has(input:checked) .seg__ring { box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); }
+  .seg:has(input:checked) .seg__ring::after { transform: scale(1); }
+  .seg:has(input:focus-visible) { outline: 2px solid var(--r5-accent); outline-offset: 3px; }
+
+  .pick { position: relative; cursor: pointer; }
+  .pick input { position: absolute; opacity: 0; pointer-events: none; }
+  .pick span {
+    display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: var(--r5-pill);
+    box-shadow: inset 0 0 0 1px var(--r5-border); font-size: 14px;
+    transition: background-color var(--r5-dur-fast), color var(--r5-dur-fast), box-shadow var(--r5-dur-fast);
+  }
+  .pick:hover span { background: var(--r5-c-06); }
+  .pick input:checked + span { background: var(--r5-charcoal); color: var(--r5-white); box-shadow: none; }
+  .pick input:focus-visible + span { outline: 2px solid var(--r5-accent); outline-offset: 3px; }
+  .pick[hidden] { display: none; }
+
+  .enq__fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: grid; gap: 8px; }
+  .field--wide { grid-column: 1 / -1; }
+  .field .micro { color: var(--r5-text-secondary); }
+  .field input, .field textarea {
+    width: 100%; min-height: 52px; padding: 14px 18px; border: 0; border-radius: 14px;
+    background: var(--r5-c-03); box-shadow: inset 0 0 0 1px var(--r5-border);
+    font-size: 16px; line-height: 1.5; transition: box-shadow var(--r5-dur-fast), background-color var(--r5-dur-fast);
+  }
+  .field textarea { resize: vertical; min-height: 140px; }
+  .field input::placeholder, .field textarea::placeholder { color: var(--r5-c-45); }
+  .field input:hover, .field textarea:hover { background: var(--r5-c-06); }
+  .field input:focus, .field textarea:focus { outline: none; background: var(--r5-white); box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); }
+  .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--r5-accent); outline-offset: 2px; }
+  :global(.was-validated) .field :is(input, textarea):invalid { box-shadow: inset 0 0 0 1.5px var(--r5-accent); }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; }
+  .consent input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--r5-charcoal); }
+  .enq__submit { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+  .enq__error { color: var(--r5-accent); }
+
+  .enq__done { display: grid; justify-items: start; gap: 18px; padding: 24px 0; }
+  .enq__done:focus { outline: none; }
+  .enq__done-ring { width: 80px; height: 80px; }
+  .enq__done-ring circle, .enq__done-ring path { fill: none; stroke-dasharray: 1; stroke-dashoffset: 1; animation: r5-draw 1200ms var(--r5-ease) forwards; }
+  .enq__done-ring circle { stroke: var(--r5-charcoal); stroke-width: 1.5; }
+  .enq__done-ring path { stroke: var(--r5-accent); stroke-width: 2; animation-delay: 700ms; }
+  .enq__done a { color: var(--r5-charcoal); }
+
+  @media (max-width: 1100px) { .enq__segments { grid-template-columns: 1fr; } .seg { min-height: 0; grid-template-columns: 22px 1fr; column-gap: 14px; } .seg__ring { margin: 0; grid-row: span 2; } }
+  @media (max-width: 900px) {
+    .chero__grid, .enq-grid { grid-template-columns: 1fr; gap: 40px; }
+    .enq-intro { position: static; }
+    .enq { padding: 24px; }
+  }
+  @media (max-width: 560px) { .enq__fields { grid-template-columns: 1fr; } .chero__direct li { grid-template-columns: 1fr; gap: 4px; } }
+  @media (prefers-reduced-motion: reduce) { .chero__copy, .chero__grid > :global(.booking) { animation: none; } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-enquiry]');
+  if (form) {
+    const servicesSet = form.querySelector<HTMLElement>('[data-services]')!;
+    const picks = form.querySelectorAll<HTMLElement>('[data-services] .pick');
+    const lineError = form.querySelector<HTMLElement>('[data-error="line"]')!;
+    const formError = form.querySelector<HTMLElement>('[data-error="form"]')!;
+
+    // Segment: show only the services for the chosen line.
+    form.querySelectorAll<HTMLInputElement>('input[name="line"]').forEach((r) =>
+      r.addEventListener('change', () => {
+        const line = r.value;
+        servicesSet.hidden = line === 'unsure';
+        picks.forEach((p) => {
+          const show = p.dataset.line === line;
+          p.hidden = !show;
+          if (!show) p.querySelector('input')!.checked = false;
+        });
+        lineError.hidden = true;
+      }),
+    );
+
+    // Deep link: /contact/?line=consulting pre-selects a segment.
+    const pre = new URLSearchParams(location.search).get('line');
+    if (pre) form.querySelector<HTMLInputElement>(`input[name="line"][value="${CSS.escape(pre)}"]`)?.click();
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      form.classList.add('was-validated');
+      const lineChosen = !!form.querySelector('input[name="line"]:checked');
+      lineError.hidden = lineChosen;
+      if (!form.checkValidity() || !lineChosen) {
+        formError.hidden = false;
+        (form.querySelector(':invalid') as HTMLElement | null)?.focus();
+        return;
+      }
+      formError.hidden = true;
+      // PLACEHOLDER: send FormData(form) to the chosen endpoint here.
+      form.querySelector<HTMLElement>('[data-steps]')!.hidden = true;
+      const done = form.querySelector<HTMLElement>('[data-done]')!;
+      done.hidden = false;
+      done.focus();
+      form.scrollIntoView({ block: 'start' });
+    });
+  }
+</script>

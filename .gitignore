@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.tools/
+.DS_Store
+
+# Kept out of the public repo: client brief + local tooling
+r5-kit/
+apple-design-skill-main/
+.claude/

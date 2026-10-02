@@ -1,0 +1,30 @@
+---
+// The R5 marks. All three use currentColor, so colour comes from the parent.
+// Size rules (design-system.md): small < 40px · main 40–200px · badge 200px+.
+import smallSvg from '../assets/logo/r5-small.svg?raw';
+import mainSvg from '../assets/logo/r5-main.svg?raw';
+import badgeSvg from '../assets/logo/r5-badge.svg?raw';
+
+interface Props {
+  variant?: 'small' | 'main' | 'badge';
+  size: number;
+  class?: string;
+  label?: string;
+  /** Orange 5 — approved for Small and Main above 44px, never the Badge. */
+  twoTone?: boolean;
+}
+const { variant = 'main', size, class: className = '', label = 'R5 Global', twoTone = false } = Astro.props;
+const useTwoTone = twoTone && variant !== 'badge' && size > 44;
+const raw = { small: smallSvg, main: mainSvg, badge: badgeSvg }[variant];
+
+// Strip fixed dimensions and the per-file clipPath (it only trims to glyph
+// bounds) so multiple inline copies never share an id.
+const svg = raw
+  .replace(/<svg[^>]*?viewBox="([^"]+)"[^>]*>/, (_m: string, vb: string) =>
+    `<svg viewBox="${vb}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}" class="logo logo--${variant} ${className}" style="width:${size}px;height:auto">`)
+  .replace(/\s*clip-path="url\([^)]*\)"/g, '')
+  .replace(/<defs>[\s\S]*?<\/defs>/, '')
+  // The 5 is the second glyph path in both Small and Main.
+  .replace(/(<path[\s\S]*?<path)/, useTwoTone ? '$1 class="logo__five"' : '$1');
+---
+<Fragment set:html={svg} />

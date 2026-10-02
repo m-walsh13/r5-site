@@ -1,0 +1,53 @@
+---
+// PLACEHOLDER — live Trustpilot / Google integration (content.md). No review
+// text is written here on purpose: testimonials must never be invented.
+interface Props { count?: number }
+const { count = 3 } = Astro.props;
+const sources = ['Trustpilot', 'Google'];
+---
+<div class="reviews">
+  <div class="reviews__summary">
+    {sources.map((s) => (
+      <div class="reviews__score">
+        <span class="reviews__stars" aria-hidden="true">{Array.from({ length: 5 }, () => <i></i>)}</span>
+        <span class="label">{s}</span>
+        <span class="micro muted">Five-star rated</span>
+      </div>
+    ))}
+  </div>
+  <ul class="reviews__grid" data-reveal>
+    {Array.from({ length: count }, (_, i) => (
+      <li class="reviews__card card">
+        <div class="reviews__head">
+          <span class="chip chip--dot">{sources[i % 2]} · awaiting feed</span>
+        </div>
+        <div class="reviews__lines" aria-hidden="true"><i></i><i></i><i></i><i style="width:55%"></i></div>
+        <div class="reviews__foot" aria-hidden="true"><span class="reviews__avatar"></span><i></i></div>
+        <span class="sr-only">Review placeholder — loads from {sources[i % 2]} once connected.</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .reviews__summary { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .reviews__score { display: inline-flex; align-items: center; gap: 14px; padding: 12px 20px 12px 14px; border-radius: var(--r5-pill); box-shadow: inset 0 0 0 1px var(--r5-border); }
+  .reviews__stars { display: inline-flex; gap: 3px; }
+  .reviews__stars i { width: 8px; height: 8px; border-radius: 50%; background: var(--r5-charcoal); }
+  .reviews__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .reviews__card { display: flex; flex-direction: column; gap: 28px; min-height: 260px; background: var(--r5-white); }
+  .reviews__head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .reviews__lines { display: grid; gap: 12px; flex: 1; }
+  .reviews__lines i, .reviews__foot i { display: block; height: 10px; border-radius: var(--r5-pill); background: var(--r5-c-06); position: relative; overflow: hidden; }
+  .reviews__lines i::after, .reviews__foot i::after {
+    content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--r5-white), transparent);
+    animation: shimmer 2.4s var(--r5-ease) infinite;
+  }
+  .reviews__foot { display: flex; align-items: center; gap: 12px; }
+  .reviews__foot i { width: 40%; }
+  .reviews__avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--r5-c-06); }
+  @keyframes shimmer { to { transform: translateX(100%); } }
+  @media (max-width: 900px) { .reviews__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .reviews__grid { grid-template-columns: 1fr; } }
+</style>

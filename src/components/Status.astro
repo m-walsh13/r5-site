@@ -1,0 +1,9 @@
+---
+import { site } from '../data/site';
+interface Props { text?: string; onDark?: boolean; class?: string }
+const { text = site.status, onDark = false, class: className = '' } = Astro.props;
+---
+<span class={`r5-status ${onDark ? 'r5-status--on-dark' : ''} ${className}`}>
+  <span class="r5-status__dot" aria-hidden="true"></span>
+  <span>{text}</span>
+</span>

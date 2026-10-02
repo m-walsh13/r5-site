@@ -1,0 +1,13 @@
+---
+import Kicker from './Kicker.astro';
+interface Props { kicker: string; title: string; lead?: string; id?: string }
+const { kicker, title, lead, id } = Astro.props;
+---
+<div class="section-head" data-reveal>
+  <div>
+    <Kicker label={kicker} />
+    <h2 class="h2" id={id}>{title}</h2>
+  </div>
+  {lead && <p class="lead" style="--i:2">{lead}</p>}
+  <slot />
+</div>

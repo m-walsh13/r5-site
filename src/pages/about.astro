@@ -1,0 +1,181 @@
+---
+import { link } from '../lib/link';
+// About — per sitemap: Who we are · What we do · Our people · Accreditations · Reviews
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Img from '../components/Img.astro';
+import Accreditations from '../components/Accreditations.astro';
+import Reviews from '../components/Reviews.astro';
+import CutRule from '../components/CutRule.astro';
+import Logo from '../components/Logo.astro';
+import { about } from '../data/pages';
+import { site } from '../data/site';
+import { consulting, securityOperations } from '../data/services';
+import { breadcrumbSchema } from '../data/schema';
+
+const lines = [
+  { label: 'Consulting', href: link('/consulting/'), image: 'consultingTable', text: 'Risk intelligence: penetration testing, investigations, risk assessment and tracing.', count: consulting.length },
+  { label: 'Security Operations', href: link('/security-operations/'), image: 'reception', text: 'Guarding, asset protection, close protection and mobile response.', count: securityOperations.length },
+] as const;
+// PLACEHOLDER — headshots and bios not yet supplied (decisions.md, open question 6).
+const people = [1, 2, 3];
+---
+<Base title={about.meta.title} description={about.meta.description} schema={[breadcrumbSchema('About', '/about/')]}>
+  <!-- 01 · Who we are -->
+  <section class="ahero" aria-labelledby="page-title">
+    <div class="container">
+      <nav class="ahero__crumb micro" aria-label="Breadcrumb">
+        <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">About</span>
+      </nav>
+      <div class="ahero__grid">
+        <div class="ahero__head">
+          <p class="label accent">{about.hero.kicker}</p>
+          <h1 class="h1" id="page-title">{site.aboutLine}</h1>
+        </div>
+        <div class="ahero__copy">
+          <p class="lead">{about.hero.lead}</p>
+          {about.hero.body.map((p) => <p class="body body-secondary">{p}</p>)}
+        </div>
+      </div>
+
+      <figure class="ahero__figure">
+        <div class="media media--cut ahero__media">
+          <Img image="londonAerial" eager sizes="100vw" width={2000} height={900} />
+        </div>
+        <!-- PREVIEW: embroidered patch from the Figma brand system (single-colour Badge). -->
+        <img class="ahero__patch" src={link('/images/r5-patch.webp')} width="327" height="327" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      </figure>
+
+      <dl class="ahero__facts" data-reveal>
+        {about.hero.facts.map((f) => (
+          <div>
+            <dt class="micro muted">{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <CutRule at={44} />
+
+  <!-- 02 · What we do -->
+  <section class="section" aria-labelledby="what-title">
+    <div class="container">
+      <SectionHead kicker={about.whatWeDo.kicker} title={about.whatWeDo.title} lead={about.whatWeDo.lead} id="what-title" />
+      <div class="lines" data-reveal>
+        {lines.map((l) => (
+          <a href={l.href} class="line card card--link">
+            <div class="line__media media"><Img image={l.image} sizes="(max-width: 900px) 40vw, 20vw" width={800} height={800} /></div>
+            <div class="line__body">
+              <span class="label accent">{String(l.count).padStart(2, '0')} services</span>
+              <h3 class="h3">{l.label}</h3>
+              <p class="body body-secondary">{l.text}</p>
+              <span class="r5-link"><span>Explore {l.label}</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Our people -->
+  <section class="section section--band" aria-labelledby="people-title">
+    <div class="container">
+      <SectionHead kicker={about.people.kicker} title={about.people.title} lead={about.people.lead} id="people-title" />
+      <ul class="people" data-reveal>
+        {people.map((n) => (
+          <li class="person card">
+            <div class="person__photo" aria-hidden="true">
+              <span class="person__ring"></span>
+              <Logo variant="small" size={38} />
+            </div>
+            <div class="person__body">
+              <span class="chip">Profile to follow</span>
+              <h3 class="h4">Team member {String(n).padStart(2, '0')}</h3>
+              <p class="micro muted">Role · to be confirmed</p>
+              <p class="caption muted">Background, experience and specialism — supplied by the client.</p>
+            </div>
+            <span class="person__li micro" aria-hidden="true">LinkedIn</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 · Accreditations -->
+  <section class="section" aria-labelledby="accr-title">
+    <div class="container">
+      <SectionHead kicker={about.accreditations.kicker} title={about.accreditations.title} lead={about.accreditations.lead} id="accr-title" />
+      <Accreditations detailed />
+    </div>
+  </section>
+
+  <CutRule at={66} />
+
+  <!-- 05 · Reviews & testimonials -->
+  <section class="section" aria-labelledby="reviews-title">
+    <div class="container">
+      <SectionHead kicker={about.reviews.kicker} title={about.reviews.title} lead={about.reviews.lead} id="reviews-title" />
+      <Reviews count={6} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ahero { padding: 28px 0 var(--r5-section); }
+  .ahero__crumb { display: flex; gap: 10px; color: var(--r5-text-secondary); margin-bottom: clamp(32px, 5vw, 64px); }
+  .ahero__crumb a { text-decoration: none; }
+  .ahero__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 64px; align-items: start; }
+  .ahero__head { display: grid; gap: 24px; animation: a-up 900ms var(--r5-ease-out) both; }
+  .ahero__head .h1 { max-width: 9ch; }
+  .ahero__copy { display: grid; gap: 18px; max-width: 56ch; animation: a-up 900ms var(--r5-ease-out) 180ms both; }
+  .ahero__figure { position: relative; margin-top: 64px; animation: a-up 1100ms var(--r5-ease-out) 280ms both; }
+  .ahero__media { aspect-ratio: 21 / 9; }
+  .ahero__media :global(img) { position: absolute; inset: 0; }
+  .ahero__patch {
+    position: absolute; right: 48px; bottom: -64px; z-index: 4;
+    width: 184px; height: auto; transform: rotate(-8deg);
+    transition: transform 700ms var(--r5-ease-out);
+  }
+  .ahero__figure:hover .ahero__patch { transform: rotate(-2deg); }
+  .ahero__facts { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 136px; border-top: 1px solid var(--r5-border); }
+  .ahero__facts div { display: grid; gap: 8px; padding: 20px 20px 0 0; }
+  .ahero__facts div + div { padding-left: 20px; border-left: 1px solid var(--r5-border); }
+  .ahero__facts dd { font-size: 20px; font-weight: 500; }
+  @keyframes a-up { from { opacity: 0; transform: translateY(16px); } }
+
+  .lines { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .line { display: grid; grid-template-columns: 180px 1fr; gap: 28px; padding: 12px; text-decoration: none; align-items: stretch; }
+  .line__media { border-radius: 50%; aspect-ratio: 1; align-self: center; }
+  .line__media :global(img) { position: absolute; inset: 0; }
+  .line__body { display: flex; flex-direction: column; gap: 12px; padding: 20px 16px 16px 0; }
+  .line__body .r5-link { margin-top: auto; padding-top: 8px; }
+
+  .people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .person { position: relative; display: flex; flex-direction: column; gap: 24px; background: var(--r5-white); }
+  .person__photo { position: relative; display: grid; place-items: center; width: min(100%, 200px); aspect-ratio: 1; border-radius: 50%; background: var(--r5-c-03); color: var(--r5-c-45); }
+  .person__ring { position: absolute; inset: 10px; border-radius: 50%; border: 1px dashed var(--r5-border); }
+  .person__body { display: grid; gap: 8px; justify-items: start; }
+  .person__li { position: absolute; top: 24px; right: 24px; padding: 6px 10px; border-radius: var(--r5-pill); box-shadow: inset 0 0 0 1px var(--r5-border); color: var(--r5-text-secondary); }
+
+  @media (max-width: 900px) {
+    .ahero__grid { grid-template-columns: 1fr; gap: 28px; }
+    .ahero__media { aspect-ratio: 4 / 3; }
+    .ahero__patch { width: 120px; right: 16px; bottom: -44px; }
+    .ahero__facts { grid-template-columns: 1fr 1fr; margin-top: 96px; }
+    .ahero__facts div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .lines, .people { grid-template-columns: 1fr; }
+    .person { flex-direction: row; align-items: center; }
+    .person__photo { width: 120px; flex: none; }
+    .person__li { top: 16px; right: 16px; }
+  }
+  @media (max-width: 560px) {
+    .line { grid-template-columns: 1fr; }
+    .line__media { width: 120px; }
+    .line__body { padding: 0 8px 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ahero__head, .ahero__copy, .ahero__figure { animation: none; }
+  }
+</style>

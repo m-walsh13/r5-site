@@ -1,0 +1,89 @@
+---
+// Sticky in-page index for a pillar page — shows where you are among the services.
+import type { Service } from '../data/services';
+interface Props { services: Service[]; label: string }
+const { services, label } = Astro.props;
+---
+<nav class="rail" aria-label={label} data-rail>
+  <div class="container">
+    <ol class="rail__track">
+      {services.map((s, i) => (
+        <li><a href={`#${s.id}`} data-rail-link={s.id}><span class="rail__n">{String(i + 1).padStart(2, '0')}</span>{s.short}</a></li>
+      ))}
+    </ol>
+  </div>
+</nav>
+
+<style>
+  .rail { position: sticky; top: calc(var(--r5-header-h) + 10px); z-index: 20; pointer-events: none; }
+  .rail__track {
+    pointer-events: auto; position: relative;
+    display: flex; gap: 4px; width: max-content; max-width: 100%; margin-inline: auto; padding: 5px;
+    overflow-x: auto; scrollbar-width: none; border-radius: var(--r5-pill);
+    background: color-mix(in srgb, var(--r5-white) 88%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: inset 0 0 0 1px var(--r5-border);
+  }
+  .rail__track::-webkit-scrollbar { display: none; }
+  /* Fade only the side that actually has hidden items */
+  .rail__track { --fl: #000; --fr: #000; -webkit-mask-image: linear-gradient(90deg, var(--fl), #000 28px, #000 calc(100% - 28px), var(--fr)); mask-image: linear-gradient(90deg, var(--fl), #000 28px, #000 calc(100% - 28px), var(--fr)); }
+  .rail__track[data-more-left] { --fl: transparent; }
+  .rail__track[data-more-right] { --fr: transparent; }
+  .rail a {
+    display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: var(--r5-pill);
+    font: 400 var(--r5-micro)/1 var(--r5-mono); letter-spacing: var(--r5-micro-ls); text-transform: uppercase;
+    white-space: nowrap; text-decoration: none; color: var(--r5-text-secondary);
+    transition: background-color var(--r5-dur-base) var(--r5-ease), color var(--r5-dur-base) var(--r5-ease);
+  }
+  /* When stuck and the header tucks away, the sub nav rises into its place —
+     same distance, same duration, same easing as the header. */
+  .rail__track { transition: transform var(--r5-dur-slide) var(--r5-ease-out); }
+  :global(html[data-header-hidden]) .rail[data-stuck] .rail__track { transform: translateY(calc(-1 * var(--r5-header-h))); }
+  .rail a:hover { color: var(--r5-charcoal); background: var(--r5-c-06); }
+  .rail a[aria-current='true'] { background: var(--r5-charcoal); color: var(--r5-white); }
+  .rail a[aria-current='true'] .rail__n { color: var(--r5-accent); }
+  .rail__n { color: var(--r5-c-45); }
+</style>
+
+<script>
+  const rail = document.querySelector<HTMLElement>('[data-rail]');
+  if (rail) {
+    const track = rail.querySelector<HTMLElement>('ol')!;
+    const checkEdges = () => {
+      track.toggleAttribute('data-more-left', track.scrollLeft > 2);
+      track.toggleAttribute('data-more-right', track.scrollLeft + track.clientWidth < track.scrollWidth - 2);
+    };
+    new ResizeObserver(checkEdges).observe(track);
+    track.addEventListener('scroll', checkEdges, { passive: true });
+    checkEdges();
+    // Stuck = pinned under the header. Only then does it follow the header up.
+    const stuckAt = () => parseFloat(getComputedStyle(rail).top);
+    let stuckTicking = false;
+    const checkStuck = () => {
+      rail.toggleAttribute('data-stuck', rail.getBoundingClientRect().top <= stuckAt() + 0.5);
+      stuckTicking = false;
+    };
+    addEventListener('scroll', () => { if (!stuckTicking) { stuckTicking = true; requestAnimationFrame(checkStuck); } }, { passive: true });
+    checkStuck();
+    const links = new Map<string, HTMLAnchorElement>();
+    rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]').forEach((a) => links.set(a.dataset.railLink!, a));
+    const setActive = (id: string | null) => {
+      links.forEach((a, key) => {
+        const on = key === id;
+        a.setAttribute('aria-current', String(on));
+        // Scroll the rail itself (never the page) to keep the active item in view.
+        if (on) {
+          track.scrollTo({ left: a.offsetLeft - (track.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+        }
+      });
+    };
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }),
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    document.querySelectorAll('[data-service]').forEach((s) => io.observe(s));
+    // Clear the highlight once the reader leaves the services block.
+    const end = document.querySelector('[data-services-end]');
+    if (end) new IntersectionObserver((e) => { if (e[0].isIntersecting) setActive(null); }, { rootMargin: '-45% 0px -50% 0px' }).observe(end);
+  }
+</script>

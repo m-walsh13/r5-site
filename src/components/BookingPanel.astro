@@ -1,0 +1,66 @@
+---
+import { link } from '../lib/link';
+// PLACEHOLDER — booking tool not chosen yet (decisions.md, open question 4).
+// The greyed calendar shows the intended footprint; swap the inner block for
+// the Calendly / Cal.com / HubSpot embed when it's decided.
+import { site } from '../data/site';
+interface Props { id?: string; compact?: boolean }
+const { id, compact = false } = Astro.props;
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const slots = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00'];
+---
+<div class={`booking ${compact ? 'booking--compact' : ''}`} id={id}>
+  <div class="booking__bar">
+    <span class="label">Book a call</span>
+    <span class="micro muted">With a consultant · Video or phone</span>
+  </div>
+  <div class="booking__body">
+    <div class="booking__preview" aria-hidden="true">
+      {days.map((d, di) => (
+        <div class="booking__day">
+          <span class="micro">{d}</span>
+          {slots.map((s, si) => <span class={`booking__slot ${(di + si) % 4 === 1 ? 'is-taken' : ''}`}>{s}</span>)}
+        </div>
+      ))}
+    </div>
+    <div class="booking__overlay">
+      <svg class="booking__loader" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="18" />
+        <g><circle cx="24" cy="6" r="3" /></g>
+      </svg>
+      <p class="h4">Live booking connects here.</p>
+      <p class="caption muted">Calendar integration to be confirmed. Until then, call us or send an enquiry — a consultant will pick a time with you.</p>
+      <div class="btn-row">
+        <a class="r5-link" href={site.phoneHref}><span>Call {site.phone}</span></a>
+        <a class="r5-link" href={link('/contact/#enquiry')}><span>Send an enquiry</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .booking { border-radius: var(--r5-radius-lg); background: var(--r5-white); box-shadow: inset 0 0 0 1px var(--r5-border); overflow: hidden; }
+  .booking__bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 18px 24px; border-bottom: 1px solid var(--r5-border); }
+  .booking__body { position: relative; padding: 24px; min-height: 360px; }
+  .booking__preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; opacity: 0.55; }
+  .booking__day { display: grid; gap: 8px; align-content: start; }
+  .booking__day .micro { color: var(--r5-text-secondary); padding: 0 0 6px 4px; }
+  .booking__slot { display: grid; place-items: center; height: 36px; border-radius: var(--r5-pill); box-shadow: inset 0 0 0 1px var(--r5-border); font: 400 12px/1 var(--r5-mono); color: var(--r5-text-secondary); }
+  .booking__slot.is-taken { box-shadow: none; background: var(--r5-c-03); color: transparent; }
+  .booking__overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    padding: 32px; text-align: center;
+    background: radial-gradient(closest-side, var(--r5-white) 60%, color-mix(in srgb, var(--r5-white) 70%, transparent));
+  }
+  .booking__overlay .caption { max-width: 40ch; }
+  .booking__overlay .btn-row { justify-content: center; gap: 24px; margin-top: 8px; }
+  .booking__loader { width: 48px; height: 48px; margin-bottom: 6px; }
+  .booking__loader > circle { fill: none; stroke: var(--r5-charcoal); stroke-width: 1.5; }
+  .booking__loader g { transform-origin: 24px 24px; animation: r5-spin 2.4s linear infinite; }
+  .booking__loader g circle { fill: var(--r5-accent); }
+  .booking--compact .booking__body { min-height: 300px; }
+  @media (max-width: 560px) {
+    .booking__preview { grid-template-columns: repeat(3, 1fr); }
+    .booking__day:nth-child(n + 4) { display: none; }
+  }
+</style>
