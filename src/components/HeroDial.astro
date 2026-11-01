@@ -1,10 +1,11 @@
 ---
 // The 24-hour dial — the ring as a clock face for the Home hero.
-// Tracks London time live and crossfades between four time-of-day images
+// Cycles slowly through a full day on its own (draggable at any point) and
+// crossfades between four time-of-day images
 // (src/data/heroDial.ts). While those are all the same photo, it simulates
 // the lighting on that one image instead.
-// Drag the orange point (or use arrow keys) to scrub through the day; it
-// glides back to the live time when released. Hour labels sit OUTSIDE the
+// Drag the orange point (or use arrow keys) to scrub through the day; the
+// cycle carries on from there when released. Hour labels sit OUTSIDE the
 // ring (compass logic) so it never reads as a target.
 import { link } from '../lib/link';
 import { heroTimes, simulateLighting } from '../data/heroDial';
@@ -69,7 +70,7 @@ const labels = [['00', 0], ['06', 90], ['12', 180], ['18', 270]].map(([t, deg]) 
   <div class="sr-slider" tabindex="0" role="slider" aria-label="Time of day in London" aria-valuemin="0" aria-valuemax="1439" data-dial-slider></div>
 
   <div class="dial__read micro" aria-live="off">
-    <span class="muted" data-dial-mode>LDN · Live</span>
+    <span class="muted" data-dial-mode>LDN · 24 hours</span>
     <b data-dial-time>--:--</b>
     <span class="muted" data-dial-shift>Day shift</span>
   </div>
@@ -183,10 +184,14 @@ const labels = [['00', 0], ['06', 90], ['12', 180], ['18', 270]].map(([t, deg]) 
       glow.style.opacity = lerp(v0, v1, e).toFixed(3);
     };
 
+    // The dial runs through a full day on its own (CYCLE_MS per 24 hours),
+    // starting from the real London time. Grabbing it pauses the cycle; on
+    // release it carries on from wherever it was left.
+    const CYCLE_MS = 60_000;
+    const RESUME_MS = 1500;
     let mins = londonMins();
     let scrubbing = false;
-    let gliding = false;
-    let returnTimer = 0;
+    let resumeTimer = 0;
 
     const draw = (m: number) => {
       const frac = (m % 1440) / 1440;
@@ -209,32 +214,21 @@ const labels = [['00', 0], ['06', 90], ['12', 180], ['18', 270]].map(([t, deg]) 
       return (ang / (Math.PI * 2)) * 1440;
     };
 
-    const preview = () => { scrubbing = true; root.setAttribute('data-scrubbing', ''); modeEl.textContent = 'LDN · Preview'; window.clearTimeout(returnTimer); };
-    const backToLive = () => {
-      window.clearTimeout(returnTimer);
-      returnTimer = window.setTimeout(() => {
+    const label = { auto: 'LDN · 24 hours', manual: 'LDN · Your time' };
+    const preview = () => { scrubbing = true; root.setAttribute('data-scrubbing', ''); modeEl.textContent = label.manual; window.clearTimeout(resumeTimer); };
+    const resume = () => {
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
         root.removeAttribute('data-scrubbing');
-        modeEl.textContent = 'LDN · Live';
+        modeEl.textContent = label.auto;
         scrubbing = false;
-        if (reduce) return;
-        gliding = true;
-        const from = mins;
-        const delta = ((londonMins() - from + 2160) % 1440) - 720;
-        const start = performance.now();
-        const step = (t: number) => {
-          const p = Math.min(1, (t - start) / 900), e = 1 - Math.pow(1 - p, 3);
-          mins = (from + delta * e + 1440) % 1440;
-          draw(mins);
-          if (p < 1) requestAnimationFrame(step); else gliding = false;
-        };
-        requestAnimationFrame(step);
-      }, 2200);
+      }, RESUME_MS);
     };
 
     svg.addEventListener('pointerdown', (e) => { preview(); mins = fromPointer(e); draw(mins); svg.setPointerCapture(e.pointerId); });
     svg.addEventListener('pointermove', (e) => { if (scrubbing && svg.hasPointerCapture(e.pointerId)) { mins = fromPointer(e); draw(mins); } });
-    svg.addEventListener('pointerup', backToLive);
-    svg.addEventListener('pointercancel', backToLive);
+    svg.addEventListener('pointerup', resume);
+    svg.addEventListener('pointercancel', resume);
     slider.addEventListener('keydown', (e) => {
       const step = ({ ArrowRight: 15, ArrowUp: 15, ArrowLeft: -15, ArrowDown: -15, PageUp: 60, PageDown: -60 } as Record<string, number>)[e.key];
       if (!step) return;
@@ -242,11 +236,31 @@ const labels = [['00', 0], ['06', 90], ['12', 180], ['18', 270]].map(([t, deg]) 
       preview();
       mins = (mins + step + 1440) % 1440;
       draw(mins);
-      backToLive();
+      resume();
     });
 
     draw(mins);
-    // Follow the live clock once a second (cheaper than every frame).
-    window.setInterval(() => { if (!scrubbing && !gliding) { mins = londonMins(); draw(mins); } }, 1000);
+
+    if (reduce) {
+      // No automatic motion: show the real London time, updated each minute.
+      modeEl.textContent = 'LDN · Live';
+      window.setInterval(() => { if (!scrubbing) { mins = londonMins(); draw(mins); } }, 60_000);
+    } else {
+      modeEl.textContent = label.auto;
+      // Only animate while the hero is on screen.
+      let visible = true;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(root);
+      let last = performance.now();
+      const tick = (t: number) => {
+        const dt = Math.min(100, t - last);
+        last = t;
+        if (visible && !scrubbing) {
+          mins = (mins + (dt / CYCLE_MS) * 1440) % 1440;
+          draw(mins);
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
   }
 </script>
