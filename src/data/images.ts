@@ -21,9 +21,9 @@ export const images = {
     credit: "Zoshua Colah", // https://unsplash.com/photos/a-grand-hotel-lobby-filled-with-sunlight-SXePqzrArfY
   },
   media: {
-    src: 'https://images.unsplash.com/photo-1651465531201-7e430660fd82',
-    alt: "A broadcast studio with cameras and lighting rigs",
-    credit: "Brad Weaver", // https://unsplash.com/photos/a-room-with-a-camera-and-equipment-qhamVJdrkRs
+    src: 'https://images.unsplash.com/photo-1782889187454-a568fe1f20e2',
+    alt: "A film crew silhouetted around a camera against a pale sky",
+    credit: "Unsplash", // https://unsplash.com/photos/film-crew-with-large-camera-under-a-cloudy-sky
   },
   construction: {
     src: 'https://images.unsplash.com/photo-1655975719898-8f3432eed322',
