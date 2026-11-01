@@ -24,6 +24,7 @@ export const site = {
 export const nav = [
   { label: 'Consultancy & Intelligence', href: link('/consulting/') },
   { label: 'Security Operations', href: link('/security-operations/') },
+  { label: 'Case Studies', href: link('/case-studies/') },
   { label: 'About', href: link('/about/') },
 ];
 
