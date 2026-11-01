@@ -1,0 +1,47 @@
+---
+// "How we work" — the client's shared four-step process on each pillar page.
+// Timeline styling carried over from the old per-service steps.
+import Kicker from './Kicker.astro';
+interface Props { kicker: string; title: string; steps: { title: string; text: string }[] }
+const { kicker, title, steps } = Astro.props;
+---
+<section class="section section--band process" aria-labelledby="process-title" data-services-end>
+  <div class="container">
+    <div data-reveal>
+      <Kicker label={kicker} />
+      <h2 class="h2" id="process-title">{title}</h2>
+    </div>
+    <ol class="process__steps" data-reveal>
+      {steps.map((step, i) => (
+        <li>
+          <span class="process__dot" aria-hidden="true"></span>
+          <span class="micro accent">{String(i + 1).padStart(2, '0')}</span>
+          <strong class="process__title">{step.title}</strong>
+          <span class="body body-secondary">{step.text}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process .h2 { max-width: 20ch; }
+  .process__steps { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 56px; padding-top: 32px; }
+  .process__steps::before { content: ''; position: absolute; left: 0; right: 0; top: 5px; height: 1px; background: var(--r5-border); transform-origin: left; transform: scaleX(var(--drawn, 1)); transition: transform 1400ms var(--r5-ease-out); }
+  :global(.js) .process__steps:not(.is-in)::before { --drawn: 0; }
+  .process__steps li { position: relative; display: grid; gap: 8px; align-content: start; }
+  .process__steps li::before { content: ''; position: absolute; left: 0; right: -32px; top: -27px; height: 1px; background: var(--r5-charcoal); transform: scaleX(0); transform-origin: left; transition: transform 520ms var(--r5-ease-out); }
+  .process__steps li:last-child::before { right: 0; }
+  .process__steps li:hover::before { transform: scaleX(1); }
+  .process__dot { position: absolute; top: -32px; left: 0; z-index: 1; width: 11px; height: 11px; border-radius: 50%; background: var(--r5-white); box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); transition: background-color var(--r5-dur-base) var(--r5-ease), transform var(--r5-dur-base) var(--r5-ease-out); }
+  .process__steps li:hover .process__dot { background: var(--r5-charcoal); transform: scale(1.25); }
+  .process__title { font-size: 18px; font-weight: 600; line-height: 1.35; }
+  .process__steps .body { font-size: 15px; transition: color var(--r5-dur-base) var(--r5-ease); }
+  .process__steps li:hover .body { color: var(--r5-charcoal); }
+  @media (max-width: 900px) {
+    .process__steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+    .process__steps::before, .process__steps li::before { display: none; }
+    .process__dot { top: -20px; }
+  }
+  @media (max-width: 560px) { .process__steps { grid-template-columns: 1fr; } }
+</style>

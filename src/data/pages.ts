@@ -1,8 +1,10 @@
 // Page-level copy: SEO meta, section headings, case studies and FAQs.
 // Layout lives in src/pages — this file is the editable layer.
 //
-// FILLER COPY: written to brief for layout and SEO review. Client to confirm.
+// Client-approved copy from "R5 Global Website Copy" (28 Oct 2026) where
+// supplied. Anything still ours is marked NOT CLIENT COPY.
 import type { ImageKey } from './images';
+import type { Quote } from './services';
 
 // One featured case study per service page — anonymous, sector and geography only.
 export type CaseStudy = {
@@ -19,89 +21,120 @@ export type CaseStudy = {
 
 export type Faq = { q: string; a: string };
 
+/* --------------------------------------------------- Shared client copy */
+
+export type Pillar = {
+  name: string;
+  quote: Quote;
+  line: string;
+  body: string[];
+  closer?: string;
+  cta: string;
+};
+
+// Client copy: used as the Home overviews AND as each pillar page's opening.
+export const consultingIntro: Pillar = {
+  name: 'Consultancy & Intelligence',
+  quote: { text: 'Why all this guesswork?', cite: 'Marcus Aurelius' },
+  line: 'We’re with Marcus on this one.',
+  body: [
+    'How secure are you, really? What have you missed? And does everything work quite as well as everyone thinks?',
+    'We help you find out. Our consultancy, investigations and intelligence establish the facts, test assumptions and give you clear advice on what to do next. Something firmer than a hunch to go on.',
+  ],
+  cta: 'Take a closer look',
+};
+
+export const operationsIntro: Pillar = {
+  name: 'Security Operations',
+  quote: { text: 'Enough to keep all bad men away.', cite: 'Agis, King of Sparta, when asked how many Spartans there were' },
+  line: 'A reasonably clear staffing brief.',
+  body: [
+    'We’d add: the right people, properly briefed, exactly where you need them.',
+    'From busy events to sensitive sites, we provide carefully selected security teams with R5’s leadership behind them. People who know when to be visible, when to be discreet and when to step in.',
+    'Your business is in their hands. We’re particular about whose hands those are.',
+  ],
+  closer: 'Security where you need it. When you need it.',
+  cta: 'Explore Security Operations',
+};
+
+export const contactCta = {
+  title: 'You’ve got our attention.',
+  lead: 'Tell us about your organisation, what you’re dealing with and what you need to achieve. We’ll ask a few useful questions, listen carefully and work out how we can help.',
+  cta: 'Discuss your requirements',
+};
+
 /* ------------------------------------------------------------------ Home */
 export const home = {
+  // SEO meta written by us, not the client — client to confirm.
   meta: {
-    title: 'R5 Global | Corporate Security Consultancy, London',
+    title: 'R5 Global | Physical Security Consultancy & SIA Guarding, London',
     description:
-      'London-based risk and security consultancy, operating globally. Security consulting, penetration testing, investigations and SIA-licensed manned guarding. ACS accredited.',
+      'A physical security consultancy with the people to put plans into practice. Risk consultancy, penetration testing, investigations, intelligence and SIA-licensed guarding from London.',
   },
-  hero: {
-    kicker: 'Risk & security consultancy · London',
-    lead: 'Risk and security consultancy for organisations that would rather be prepared than surprised. London-based, operating globally.',
-  },
-  proof: {
-    kicker: 'Sectors & accreditations',
-    title: 'Trusted where discretion matters.',
-    lead: "We don't publish client names. We'll tell you the sectors instead.",
-  },
-  pillars: {
-    kicker: 'What we do',
-    title: 'Two ways we work.',
-    lead: 'Different buyers, different problems. The same standard.',
-    consulting: {
-      title: 'Know before you act.',
-      text: 'Risk intelligence for security and risk leads — penetration testing, investigations, risk assessment and tracing.',
-    },
-    operations: {
-      title: 'Security that runs like a system.',
-      text: 'Guarding, asset protection, close protection and mobile response — planned from intelligence, run with discipline.',
-    },
+  opening: {
+    quote: { text: 'Let no act be done without a purpose.', cite: 'Marcus Aurelius' },
+    title: 'Good advice. Especially when you’re paying for it.',
+    body: [
+      'We’re a physical security consultancy with the people to put plans into practice. Our SIA-licensed guards work everywhere from hospitality to the defence sector. Our risk consultancy and intelligence work spans manufacturing, critical infrastructure and plenty in between.',
+      'It starts with understanding your business and what you need from your security. That might mean the right officer at your front door, clear advice on a complicated risk, or a team that can help you manage both.',
+      'We work out what’s needed, put it in place and stay involved. Every recommendation should have a reason. Everyone on site should know why they’re there.',
+    ],
+    cta: 'Let’s talk',
   },
   why: {
-    kicker: 'The difference',
-    title: 'Why R5',
-    lead: "Strength doesn't come from looking tough. It comes from knowing more, planning better and answering for the result.",
+    kicker: 'Why R5',
+    quote: { text: 'Be tolerant with others and strict with yourself.', cite: 'Marcus Aurelius' },
+    title: 'We’re quite demanding. Starting with ourselves.',
+    lead: 'Our leadership brings experience in specialist policing and security management to the way we plan, select our people and oversee the work.',
     points: [
       {
-        title: 'Intelligence-led',
-        text: 'Every engagement starts with understanding the risk. Consulting and operations share the same thinking.',
+        title: 'People worth introducing.',
+        text: 'They’ll be working with your team and representing your business. We choose people for their experience, judgement and suitability for the assignment. Being good with people is part of being good at security.',
       },
       {
-        title: 'Discreet by default',
-        text: 'No client names. No logos. Confidentiality is part of the service, not a clause in the contract.',
+        title: 'Properly prepared.',
+        text: 'Clear briefs, defined responsibilities and plans grounded in how your operation works. Everyone should understand what’s expected before they’re expected to deliver it.',
       },
       {
-        title: 'Deployed 24 / 7 / 365',
-        text: 'Guards deployed 24 hours a day, 365 days a year.',
-      },
-      {
-        title: 'Accountable',
-        text: 'SIA-licensed, ACS accredited, ICO registered — with clear lines of responsibility from the first call.',
+        title: 'Management you can get hold of.',
+        text: 'Our managers stay involved, support the team and deal with issues that need attention. You know who’s responsible and who to call. We’re quite comfortable being that call.',
       },
     ],
+    cta: 'Meet the people behind R5',
+  },
+  sectors: {
+    kicker: 'Who we work with',
+    title: 'We keep interesting company.',
+    lead: 'From art galleries to critical infrastructure, the surroundings change. The attention to detail doesn’t.',
   },
   reviews: {
-    kicker: 'Client reviews',
-    title: 'What clients say.',
-    lead: 'Five-star rated on Trustpilot and Google. Reviews load here, live from both.',
-  },
-  book: {
-    kicker: 'Book a call',
-    title: 'Prepared, not surprised.',
-    lead: "A short call with a consultant. No sales script — you explain the problem, and we'll tell you honestly whether we're the right people to solve it.",
-    steps: [
-      'Tell us what is worrying you.',
-      'We ask the awkward questions.',
-      'You leave with a clear next step.',
-    ],
+    kicker: 'What our clients say',
+    title: 'We’ve said quite enough about ourselves.',
   },
 };
 
 /* ----------------------------------------------------------------- About */
+export type Person = { name: string; role: string; bio: string };
+
 export const about = {
+  // SEO meta written by us, not the client — client to confirm.
   meta: {
-    title: 'About R5 Global | Risk & Security Consultancy, London',
+    title: 'About R5 Global | Physical Security Consultancy, London',
     description:
-      'R5 Global is a London-based risk and security consultancy operating globally. SIA-licensed, ACS accredited and ICO registered, working with SMEs and multinationals.',
+      'R5 means you’re coming through loud and clear. Meet the team behind R5 Global: physical security consultancy and SIA-licensed security operations, led by specialist policing and security experience.',
   },
   hero: {
     kicker: 'About R5',
-    lead: 'A London-based risk and security consultancy, operating globally. A small, flexible team with backgrounds in public and corporate security, risk management and operational strategy.',
+    title: 'We like to know who we’re dealing with. You probably do too.',
+    line: 'R5 means you’re coming through loud and clear.',
     body: [
-      'R5 exists to do security differently. Not louder, not bigger — sharper. Our strength comes from intelligence, strong systems and accountability, and from a team that has done this work across the public and private sectors.',
-      'We work with SMEs and large multinationals, and we treat both the same way: carefully, discreetly and with a plan.',
+      'It’s radio shorthand used in parts of UK policing. We liked the principle enough to name the business after it.',
+      'Before we can help, we need to understand what we’re helping with. Your organisation, the pressures you’re facing and what you need to achieve. Including the bits that don’t fit neatly into a brief.',
+      'That might mean choosing the right SIA-licensed officer for your gallery opening. Or helping a multinational rethink its security as the business changes.',
+      'The scale changes. Our starting point doesn’t: understand properly, then work out how to help.',
     ],
+    cta: 'Meet the team',
+    // NOT CLIENT COPY — kept from the build; client to confirm or remove.
     facts: [
       { label: 'Base', value: 'London' },
       { label: 'Reach', value: 'Operating globally' },
@@ -109,40 +142,51 @@ export const about = {
       { label: 'Registered', value: 'England & Wales' },
     ],
   },
+  // NOT CLIENT COPY — no wording supplied for this sitemap section.
   whatWeDo: {
     kicker: 'What we do',
     title: 'Two service lines. One way of thinking.',
-    lead: 'Consulting finds and understands the risk. Security Operations manages it on the ground. Most clients use one; the best-protected use both.',
+    lead: 'Consultancy & Intelligence establishes the facts. Security Operations puts the right people on the ground. Many clients use both.',
   },
-  people: {
-    kicker: 'Our people',
-    title: 'Our people',
-    lead: 'Experienced, discreet and deliberately few. Backgrounds in public and corporate security, risk management and operational strategy.',
+  team: {
+    kicker: 'Team profiles',
+    title: 'Meet the team.',
+    people: [
+      { name: 'Rich Hammond', role: 'Founder', bio: 'Rich is passionate about high standards and delivering the best possible security services across everything R5 does.' },
+      { name: 'Mark McSweeney', role: 'Director of Security Operations', bio: 'Mark leads R5’s security operations, drawing on his experience as a senior police leader. He’s responsible for making sure our teams are properly prepared and supported.' },
+      { name: 'Alannah', role: 'Operations Officer', bio: 'Alannah looks after the day-to-day running of R5, keeping the planning, administration and practical details organised so our people can get on with their work.' },
+      { name: 'Gabriel', role: 'Operations Support Lead', bio: 'Gabriel supports everything from operational deployments to troubleshooting with clients, and the practicalities in between. He’s there to make sure the right people are in the right place at the right time.' },
+    ] satisfies Person[],
   },
+  // NOT CLIENT COPY — no wording supplied for these sitemap sections.
   accreditations: {
     kicker: 'Accreditations',
     title: 'Our accreditations',
     lead: 'Independent standards, independently checked.',
   },
   reviews: {
-    kicker: 'Reviews & testimonials',
-    title: 'In their words.',
-    lead: 'Five-star rated on Trustpilot and Google. Every review below loads live from the source — we don’t edit them.',
+    kicker: 'What our clients say',
+    title: 'We’ve said quite enough about ourselves.',
   },
 };
 
 /* ------------------------------------------------------------ Consulting */
 export const consultingPage = {
+  // SEO meta written by us, not the client — client to confirm.
   meta: {
-    title: 'Corporate Security Consultancy UK | R5 Global Consulting',
+    title: 'Security Consultancy, Penetration Testing & Investigations UK | R5 Global',
     description:
-      'Physical penetration testing, corporate investigations, security risk assessments and asset tracing. A London-based physical security consultancy working across the UK and overseas.',
+      'Security and risk consultancy, physical penetration testing, corporate investigations, intelligence and threat monitoring, and TSCM sweeps. Clear findings and practical advice from R5 Global.',
   },
-  hero: {
-    kicker: 'Consulting · Risk intelligence',
-    title: 'Intelligence first. Everything else follows.',
-    lead: 'Corporate security consultancy for organisations that need to know before they act. Penetration testing, investigations, risk assessment and tracing — run discreetly from London, wherever the problem is.',
-    body: 'Consulting is where most of our work begins. Before anyone is posted on a door, we find out what the risk actually is, who it comes from and what it would cost you. Sometimes the answer is more security. Often it is better security, in fewer places.',
+  process: {
+    kicker: 'How we work',
+    title: 'We like to know what we’re getting into.',
+    steps: [
+      { title: 'Get properly acquainted.', text: 'We get to know your operation, your team and the pressures you’re working under. The priorities, the practicalities and the things that don’t make it into the brief.' },
+      { title: 'Ask the useful questions.', text: 'We work with the people closest to the issue to understand what’s happening, what’s already known and what you need the work to achieve. Good advice starts with paying attention.' },
+      { title: 'Agree the work. Then get on with it.', text: 'Clear scope, responsibilities, timescales and cost. We agree who needs to be involved and how we’ll keep you informed. If the scope needs to change, we talk it through.' },
+      { title: 'Make the findings earn their keep.', text: 'What we found, what it means and what you can do about it, with the evidence behind it. Useful for the people making the decisions and the people who need to make them happen.' },
+    ],
   },
   cases: {
     kicker: 'Case study',
@@ -158,16 +202,16 @@ export const consultingPage = {
         'Under an agreed scope and written authorisation, our team attempted entry the way a real adversary would — through reception, deliveries and everyday staff routines — recording every step.',
       result:
         'A prioritised set of fixes, completed before the audit, and a clear picture of which controls were already doing their job.',
-      service: 'Physical penetration testing',
+      service: 'Physical Penetration Testing',
       serviceId: 'physical-penetration-testing',
       image: 'defence',
     } satisfies CaseStudy,
   },
   contact: {
-    kicker: 'Speak to a consultant',
-    title: 'Got a question that needs a proper answer?',
-    lead: "Talk it through with a consultant. We'll tell you what we'd look at first — and whether you need us at all.",
+    kicker: 'Get in touch',
+    title: 'Tell us what you’re dealing with.',
   },
+  // NOT CLIENT COPY — FAQs kept from the build; client to supply or confirm.
   faqs: [
     {
       q: 'What does a physical penetration test involve?',
@@ -179,7 +223,7 @@ export const consultingPage = {
     },
     {
       q: 'Do you work outside the UK?',
-      a: "Yes. We're London-based and operate globally — including country and regional risk assessments, international investigations and tracing.",
+      a: "Yes. We're London-based and operate globally — including threat and risk assessments, investigations and intelligence work.",
     },
     {
       q: 'How do you keep investigations confidential?',
@@ -198,19 +242,23 @@ export const consultingPage = {
 
 /* --------------------------------------------------- Security Operations */
 export const operationsPage = {
+  // SEO meta written by us, not the client — client to confirm.
   meta: {
-    title: 'Manned Guarding & Security Services London | R5 Global',
+    title: 'SIA Security Guarding, Event & Site Security London | R5 Global',
     description:
-      'SIA-licensed manned guarding, front of house and concierge security, asset protection, close protection and mobile patrols across London. ACS accredited, deployed 24/7/365.',
+      'Carefully selected SIA-licensed security officers for guarding and asset protection, events and film and production, and vacant, construction and pre-opening sites. Managed by R5 Global.',
   },
-  hero: {
-    kicker: 'Security Operations',
-    title: 'Not more guards. Better security.',
-    lead: 'Manned guarding, asset protection, close protection and mobile response — planned from intelligence, run as a system and accountable to you.',
-    body: 'Most guarding companies sell hours. We sell outcomes. Every deployment starts with an understanding of the risk, every officer is SIA-licensed and hand-selected for the site, and every shift is run with the same discipline as our consulting work.',
-    sectorsLine:
-      'Hospitality and restaurant security, retail security, construction site security and commercial property security across London.',
+  process: {
+    kicker: 'How we work',
+    title: 'Excellent security takes exceptional management.',
+    steps: [
+      { title: 'Understand the operation.', text: 'We get to know your operation, your people and the issues you’re facing. Then we agree what protection is needed, how it will work and what it will cost.' },
+      { title: 'Put the right people on it.', text: 'We choose the team for the setting and give them a proper brief: the risks, the responsibilities and how you expect things to be handled. The introductions come with instructions.' },
+      { title: 'Stay close to the work.', text: 'Our managers stay involved, supervise the work and support the team. You have a clear point of contact and someone responsible for sorting things out.' },
+      { title: 'Keep the plan current.', text: 'Sites change. Schedules move. Someone adds another hundred guests. We review the arrangements with you and agree adjustments as your needs change.' },
+    ],
   },
+  // NOT CLIENT COPY — sitemap section, no wording supplied.
   always: {
     kicker: 'Deployment & confidentiality',
     title: 'Always on. Never on the record.',
@@ -237,19 +285,19 @@ export const operationsPage = {
         'We hand-selected SIA-licensed officers for each venue, briefed them on site-specific risks and put one briefing standard in place across the group.',
       result:
         'Consistent front of house security, one point of contact and clear reporting across every venue.',
-      service: 'Manned guarding',
-      serviceId: 'manned-guarding',
+      service: 'Guarding & Asset Protection',
+      serviceId: 'guarding-asset-protection',
       image: 'hospitality',
     } satisfies CaseStudy,
   },
   contact: {
-    kicker: 'Speak to a consultant',
-    title: 'Need people on the ground?',
-    lead: "Tell us about the site and the risk. We'll tell you what good looks like — and what it takes to get there.",
+    kicker: 'Get in touch',
+    title: 'Tell us what needs looking after.',
   },
+  // NOT CLIENT COPY — FAQs kept from the build; client to supply or confirm.
   faqs: [
     {
-      q: 'How is R5 different from a standard manned guarding company?',
+      q: 'How is R5 different from a standard guarding company?',
       a: 'We start with the risk, not the rota. Every deployment is planned from an understanding of the site, officers are SIA-licensed and hand-selected for the environment, and the work is supervised and reported rather than left to run.',
     },
     {
@@ -261,12 +309,12 @@ export const operationsPage = {
       a: 'Yes. Our guards are deployed 24 hours a day, 365 days a year.',
     },
     {
-      q: 'Do you provide front of house and concierge security?',
-      a: 'Yes. Front of house and corporate concierge security is a core part of our manned guarding — officers who look after your visitors as well as your building.',
+      q: 'Do you provide front-of-house security?',
+      a: 'Yes. Front-of-house security and access control are a core part of our guarding — officers who look after your visitors as well as your building.',
     },
     {
-      q: 'Can you manage security across multiple sites?',
-      a: 'Yes. Mobile patrols and a single point of contact let us keep standards consistent across several locations — guarding where it is needed, patrols where it is not.',
+      q: 'Can you look after a vacant or construction site?',
+      a: 'Yes. We combine officers, CCTV and alarms, secure boarding and monitoring as the property needs, and adjust the protection as the site changes.',
     },
     {
       q: 'How quickly can you deploy?',
@@ -277,16 +325,18 @@ export const operationsPage = {
 
 /* --------------------------------------------------------------- Contact */
 export const contactPage = {
+  // SEO meta written by us, not the client — client to confirm.
   meta: {
-    title: 'Contact R5 Global | Book a Call With a Security Consultant',
+    title: 'Contact R5 Global | Discuss Your Security Requirements',
     description:
-      'Book a call with an R5 Global security consultant, or send a confidential enquiry about consulting, penetration testing, investigations or manned guarding in London.',
+      'Tell us about your organisation, what you’re dealing with and what you need to achieve. Contact R5 Global about security consultancy, investigations, intelligence or SIA-licensed security operations.',
   },
   book: {
     kicker: 'Contact',
-    title: 'Start with a conversation.',
-    lead: 'Book a call with a consultant, or tell us what you need below. Everything you share is treated in confidence.',
+    title: contactCta.title,
+    lead: contactCta.lead,
   },
+  // NOT CLIENT COPY — form headings and confirmation kept from the build.
   form: {
     kicker: 'Enquiry',
     title: 'Tell us what you need.',

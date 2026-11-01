@@ -1,13 +1,16 @@
 ---
 import { link } from '../lib/link';
-// Home — six sections, per the signed-off sitemap:
-// Hero · Sectors/Accreditations · Two pillars · Why R5 · Testimonials · Book a call
+// Home — client copy (R5 Global Website Copy, 28 Oct 2026), in the client's order:
+// Opening · Consultancy overview · Operations overview · Why R5 · Sectors
+// (+ accreditations, from the sitemap) · Client reviews · Contact.
+// "Selected work" previews: Myles to add.
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import Ring from '../components/Ring.astro';
 import Status from '../components/Status.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Kicker from '../components/Kicker.astro';
+import Quote from '../components/Quote.astro';
 import Arrow from '../components/Arrow.astro';
 import CutRule from '../components/CutRule.astro';
 import Img from '../components/Img.astro';
@@ -15,29 +18,31 @@ import SectorMarquee from '../components/SectorMarquee.astro';
 import Accreditations from '../components/Accreditations.astro';
 import Reviews from '../components/Reviews.astro';
 import BookingPanel from '../components/BookingPanel.astro';
-import { home } from '../data/pages';
-import { site, bookHref } from '../data/site';
+import { home, consultingIntro, operationsIntro, contactCta } from '../data/pages';
+import { site, contactHref } from '../data/site';
 import { consulting, securityOperations } from '../data/services';
 
-const words = site.masterLine.split(' ');
+const words = home.opening.title.split(' ');
 const pillars = [
-  { key: 'consulting', label: 'Consulting', href: link('/consulting/'), image: 'consultingTable', services: consulting, copy: home.pillars.consulting, cut: 'media--cut' },
-  { key: 'operations', label: 'Security Operations', href: link('/security-operations/'), image: 'reception', services: securityOperations, copy: home.pillars.operations, cut: 'media--cut' },
+  { key: 'consulting', intro: consultingIntro, href: link('/consulting/'), image: 'consultingTable', services: consulting, band: false },
+  { key: 'operations', intro: operationsIntro, href: link('/security-operations/'), image: 'reception', services: securityOperations, band: true },
 ] as const;
 ---
 <Base title={home.meta.title} description={home.meta.description}>
-  <!-- 01 · Hero -->
+  <!-- Opening -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero__grid">
       <div class="hero__copy">
-        <p class="label hero__kicker">{home.hero.kicker}</p>
+        <Quote quote={home.opening.quote} class="hero__quote" />
         <h1 class="h1 hero__title" id="hero-title">
           {words.map((w, i) => <Fragment><span class="w"><span style={`--w:${i}`}>{w}</span></span>{i < words.length - 1 && ' '}</Fragment>)}
         </h1>
-        <p class="lead hero__lead">{home.hero.lead}</p>
+        <p class="lead hero__lead">{home.opening.body[0]}</p>
+        <div class="hero__more">
+          {home.opening.body.slice(1).map((p) => <p class="body body-secondary">{p}</p>)}
+        </div>
         <div class="btn-row hero__cta">
-          <Button href={bookHref}>Book a call</Button>
-          <Button href="#services" variant="ghost">Our services</Button>
+          <Button href={contactHref}>{home.opening.cta}</Button>
         </div>
         <Status class="hero__status" />
       </div>
@@ -51,85 +56,75 @@ const pillars = [
     </div>
   </section>
 
+  <!-- Consultancy overview · Operations overview -->
+  {pillars.map((p, idx) => (
+    <section class={`section pillar-intro ${p.band ? 'section--band pillar-intro--reverse' : ''}`} id={idx === 0 ? 'services' : undefined} aria-labelledby={`${p.key}-title`}>
+      <div class="container pillar-intro__grid">
+        <div class="pillar-intro__copy" data-reveal>
+          <h2 class="h2" id={`${p.key}-title`}>{p.intro.name}</h2>
+          <Quote quote={p.intro.quote} />
+          <p class="pillar-intro__line">{p.intro.line}</p>
+          {p.intro.body.map((t) => <p class="body body-secondary">{t}</p>)}
+          {p.intro.closer && <p class="pillar-intro__closer">{p.intro.closer}</p>}
+        </div>
+        <a href={p.href} class="pillar card card--link" data-reveal>
+          <div class="pillar__media media media--cut">
+            <Img image={p.image} sizes="(max-width: 900px) 100vw, 46vw" width={1400} height={900} />
+          </div>
+          <div class="pillar__body">
+            <ol class="pillar__list">
+              {p.services.map((s, i) => <li><span class="micro muted">{String(i + 1).padStart(2, '0')}</span>{s.name}</li>)}
+            </ol>
+            <span class="pillar__cta">
+              <span>{p.intro.cta}</span>
+              <span class="btn__icon" aria-hidden="true"><Arrow /><Arrow /></span>
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+  ))}
+
+  <!-- Why R5 -->
+  <section class="section why" aria-labelledby="why-title">
+    <div class="container">
+      <div class="why__intro" data-reveal>
+        <div class="why__head">
+          <Kicker label={home.why.kicker} />
+          <Quote quote={home.why.quote} />
+          <h2 class="h2" id="why-title">{home.why.title}</h2>
+        </div>
+        <div class="why__side">
+          <p class="lead">{home.why.lead}</p>
+          <a href={link('/about/#team')} class="r5-link"><span>{home.why.cta}</span></a>
+        </div>
+      </div>
+      <ul class="why__tiles" data-reveal>
+        {home.why.points.map((pt, i) => (
+          <li class={`card why__tile ${i === 1 ? 'card--dark on-dark' : ''}`}>
+            <span class={`micro ${i === 1 ? 'why__dim' : 'muted'}`}>{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="h4">{pt.title}</h3>
+            <p class="body body-secondary">{pt.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <CutRule at={58} />
 
-  <!-- 02 · Sectors & accreditations -->
+  <!-- Sectors (+ accreditations) -->
   <section class="section proof" aria-labelledby="proof-title">
     <div class="container">
-      <SectionHead kicker={home.proof.kicker} title={home.proof.title} lead={home.proof.lead} id="proof-title" />
+      <SectionHead kicker={home.sectors.kicker} title={home.sectors.title} lead={home.sectors.lead} id="proof-title" />
       <Accreditations />
     </div>
     <div class="proof__marquee"><SectorMarquee /></div>
   </section>
 
-  <!-- 03 · Two pillars -->
-  <section class="section section--band pillars" id="services" aria-labelledby="pillars-title">
-    <div class="container">
-      <SectionHead kicker={home.pillars.kicker} title={home.pillars.title} lead={home.pillars.lead} id="pillars-title" />
-      <div class="pillars__grid" data-reveal>
-        {pillars.map((p) => (
-          <a href={p.href} class="pillar card card--link">
-            <div class={`pillar__media media ${p.cut}`}>
-              <Img image={p.image} sizes="(max-width: 900px) 100vw, 46vw" width={1400} height={900} />
-            </div>
-            <div class="pillar__body">
-              <span class="label accent">{p.label}</span>
-              <h3 class="h3">{p.copy.title}</h3>
-              <p class="body body-secondary">{p.copy.text}</p>
-              <ol class="pillar__list">
-                {p.services.map((s, i) => <li><span class="micro muted">{String(i + 1).padStart(2, '0')}</span>{s.name}</li>)}
-              </ol>
-              <span class="pillar__cta">
-                <span>Explore {p.label}</span>
-                <span class="btn__icon" aria-hidden="true"><Arrow /><Arrow /></span>
-              </span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 · Why R5 -->
-  <section class="section why" aria-labelledby="why-title">
-    <div class="container why__grid">
-      <div class="why__intro" data-reveal>
-        <Kicker label={home.why.kicker} />
-        <h2 class="h2" id="why-title">{home.why.title}</h2>
-        <p class="lead">{home.why.lead}</p>
-        <a href={link('/about/')} class="r5-link"><span>More about R5</span></a>
-      </div>
-
-      <ul class="why__tiles" data-reveal>
-        <li class="card why__tile">
-          <h3 class="h4">{home.why.points[0].title}</h3>
-          <p class="body body-secondary">{home.why.points[0].text}</p>
-        </li>
-        <li class="card card--dark on-dark why__tile">
-          <h3 class="h4">{home.why.points[1].title}</h3>
-          <p class="body body-secondary">{home.why.points[1].text}</p>
-          <p class="micro why__redact" aria-hidden="true">Client: <span></span></p>
-        </li>
-        <li class="card why__tile why__tile--ring">
-          <div class="why__ring">
-            <Ring ticks={false}>
-              <span class="why__ring-stat">24/7<small class="micro muted">365</small></span>
-            </Ring>
-          </div>
-          <h3 class="h4">{home.why.points[2].title}</h3>
-          <p class="body body-secondary">{home.why.points[2].text}</p>
-        </li>
-        <li class="card why__tile">
-          <h3 class="h4">{home.why.points[3].title}</h3>
-          <p class="body body-secondary">{home.why.points[3].text}</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
   <CutRule at={34} />
 
-  <!-- 05 · Testimonials -->
+  <!-- Client reviews -->
   <section class="section" aria-labelledby="reviews-title">
     <div class="container">
       <SectionHead kicker={home.reviews.kicker} title={home.reviews.title} lead={home.reviews.lead} id="reviews-title" />
@@ -137,16 +132,14 @@ const pillars = [
     </div>
   </section>
 
-  <!-- 06 · Book a call -->
+  <!-- Contact -->
   <section class="section section--band book" aria-labelledby="book-title">
     <div class="container book__grid">
       <div class="book__copy" data-reveal>
-        <Kicker label={home.book.kicker} />
-        <h2 class="h2" id="book-title">{home.book.title}</h2>
-        <p class="lead">{home.book.lead}</p>
-        <ol class="book__steps">
-          {home.book.steps.map((s, i) => <li><span class="micro accent">{String(i + 1).padStart(2, '0')}</span>{s}</li>)}
-        </ol>
+        <Kicker label="Contact" />
+        <h2 class="h2" id="book-title">{contactCta.title}</h2>
+        <p class="lead">{contactCta.lead}</p>
+        <Button href={contactHref}>{contactCta.cta}</Button>
         <p class="data">Prefer the phone? <a href={site.phoneHref}>{site.phone}</a></p>
       </div>
       <BookingPanel compact />
@@ -159,11 +152,12 @@ const pillars = [
   .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(56px, 8vw, 104px); }
   .hero__grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 48px; align-items: center; }
   .hero__copy { display: grid; gap: 28px; justify-items: start; }
-  .hero__kicker { color: var(--r5-accent); animation: fade-up 800ms var(--r5-ease-out) both; }
-  .hero__title { max-width: 11ch; font-size: clamp(44px, 6.4vw, var(--r5-h1)); }
+  .hero__copy :global(.hero__quote) { animation: fade-up 800ms var(--r5-ease-out) both; }
+  .hero__title { max-width: 13ch; font-size: clamp(40px, 5.6vw, var(--r5-h1)); }
   .hero__title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
   .hero__title .w > span { display: inline-block; animation: word-up 1000ms var(--r5-ease-out) both; animation-delay: calc(120ms + var(--w) * 90ms); }
-  .hero__lead { max-width: 34ch; animation: fade-up 900ms var(--r5-ease-out) 520ms both; }
+  .hero__lead { max-width: 40ch; animation: fade-up 900ms var(--r5-ease-out) 520ms both; }
+  .hero__more { display: grid; gap: 14px; max-width: 52ch; margin-top: -8px; animation: fade-up 900ms var(--r5-ease-out) 580ms both; }
   .hero__cta { animation: fade-up 900ms var(--r5-ease-out) 640ms both; }
   .hero__status { animation: fade-up 900ms var(--r5-ease-out) 760ms both; }
   .hero__visual { position: relative; width: min(100%, 560px); justify-self: end; padding: 28px; animation: fade-in 1400ms var(--r5-ease) 200ms both; }
@@ -182,8 +176,18 @@ const pillars = [
   /* Proof */
   .proof__marquee { margin-top: 56px; }
 
-  /* Pillars */
-  .pillars__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  /* Pillar overviews (client copy) */
+  .pillar-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; }
+  .pillar-intro--reverse .pillar-intro__copy { order: 2; }
+  .pillar-intro__copy { display: grid; gap: 18px; justify-items: start; }
+  .pillar-intro__copy :global(.quote) { margin: 4px 0; }
+  .pillar-intro__line { font-size: var(--r5-lead); line-height: 1.45; font-weight: 600; }
+  .pillar-intro__copy .body { max-width: 54ch; }
+  .pillar-intro__closer { font-weight: 600; }
+  @media (max-width: 900px) {
+    .pillar-intro__grid { grid-template-columns: 1fr; gap: 40px; }
+    .pillar-intro--reverse .pillar-intro__copy { order: 0; }
+  }
   .pillar { position: relative; display: flex; flex-direction: column; padding: 12px; text-decoration: none; background: var(--r5-white); cursor: pointer; }
   .pillar__cta {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -198,43 +202,35 @@ const pillars = [
   .pillar:hover .pillar__cta .btn__icon :global(svg:first-child) { transform: translate(150%, -150%); }
   .pillar:hover .pillar__cta .btn__icon :global(svg + svg) { transform: translate(0, 0); }
   .pillar__media { aspect-ratio: 16 / 10; border-radius: calc(var(--r5-radius) - 6px); }
-  .pillar__body { display: flex; flex-direction: column; gap: 14px; padding: 28px 12px 8px; flex: 1; }
-  .pillar__body .body { max-width: 46ch; }
-  .pillar__list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; padding: 18px 0; margin: 4px 0 8px; border-block: 1px solid var(--r5-border); }
-  .pillar__list li { display: flex; gap: 10px; font-size: 14px; line-height: 1.45; }
+  .pillar__body { display: flex; flex-direction: column; gap: 14px; padding: 16px 12px 8px; flex: 1; }
+  .pillar__list { display: grid; gap: 0; margin: 0 0 8px; }
+  .pillar__list li + li { border-top: 1px solid var(--r5-border); }
+  .pillar__list li { display: flex; gap: 14px; padding: 12px 0; font-size: 16px; font-weight: 500; line-height: 1.45; }
   .pillar__list .micro { padding-top: 3px; }
-  @media (max-width: 900px) { .pillars__grid { grid-template-columns: 1fr; } }
-  @media (max-width: 560px) { .pillar__list { grid-template-columns: 1fr; } .pillar__body { padding: 20px 8px 8px; } }
+  @media (max-width: 560px) { .pillar__body { padding: 12px 8px 8px; } }
 
   /* Why */
-  .why__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
-  .why__intro { display: grid; gap: 22px; justify-items: start; position: sticky; top: calc(var(--r5-header-h) + 32px); }
-  .why__intro :global(.kicker) { margin-bottom: 4px; }
-  .why__tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .why__intro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 64px; align-items: end; margin-bottom: 56px; }
+  .why__head { display: grid; gap: 22px; justify-items: start; }
+  .why__head :global(.kicker) { margin-bottom: 0; }
+  .why__side { display: grid; gap: 20px; justify-items: start; }
+  .why__tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   .why__tile { display: flex; flex-direction: column; gap: 14px; }
-  .why__redact { display: flex; align-items: center; gap: 10px; margin-top: 8px; color: var(--r5-w-45); }
-  .why__redact span { display: inline-block; width: 96px; height: 12px; border-radius: 3px; background: var(--r5-w-12); }
-  .why__ring { width: min(100%, 180px); margin: 0 auto 12px; }
-  .why__ring-stat { display: grid; justify-items: center; gap: 6px; font-size: var(--r5-h2); line-height: 1; font-weight: 600; letter-spacing: -0.01em; }
+  .why__tile .micro { margin-bottom: 24px; }
+  .why__dim { color: var(--r5-w-45); }
   @media (max-width: 900px) {
-    .why__grid { grid-template-columns: 1fr; gap: 40px; }
-    .why__intro { position: static; }
-  }
-  @media (max-width: 600px) {
+    .why__intro { grid-template-columns: 1fr; margin-bottom: 40px; }
     .why__tiles { grid-template-columns: 1fr; }
-    .why__tile { min-height: 0; }
   }
 
   /* Book */
   .book__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: center; }
   .book__copy { display: grid; gap: 22px; justify-items: start; }
   .book__copy :global(.kicker) { margin-bottom: 4px; }
-  .book__steps { display: grid; gap: 0; width: 100%; border-top: 1px solid var(--r5-border); }
-  .book__steps li { display: flex; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--r5-border); }
   .book__copy a { color: var(--r5-charcoal); }
   @media (max-width: 900px) { .book__grid { grid-template-columns: 1fr; gap: 40px; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero__title .w > span, .hero__kicker, .hero__lead, .hero__cta, .hero__status, .hero__visual { animation: none; }
+    .hero__title .w > span, .hero__copy :global(.hero__quote), .hero__lead, .hero__more, .hero__cta, .hero__status, .hero__visual { animation: none; }
   }
 </style>

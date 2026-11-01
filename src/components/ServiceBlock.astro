@@ -1,7 +1,8 @@
 ---
-// One service, as an on-page section. Client chose no individual service
-// pages — each block carries the SEO weight (H2 = service name, id = anchor).
+// One service, as an on-page section, in the client's structure:
+// quote → line → body → list → closer. H2 = service name, id = anchor (SEO).
 import Img from './Img.astro';
+import Quote from './Quote.astro';
 import type { Service } from '../data/services';
 interface Props { service: Service; index: number; line: string; reverse?: boolean }
 const { service: s, index, line, reverse = false } = Astro.props;
@@ -13,11 +14,16 @@ const num = String(index + 1).padStart(2, '0');
       <div class="svc__copy" data-reveal>
         <p class="label"><span class="muted">{line} /</span> <span class="accent">{num}</span></p>
         <h2 class="h2" id={`${s.id}-title`}>{s.name}</h2>
-        <p class="svc__summary">{s.summary}</p>
+        {s.quote && <Quote quote={s.quote} />}
+        <p class="svc__line">{s.line}</p>
         {s.body.map((p) => <p class="body body-secondary">{p}</p>)}
-        <ul class="svc__features">
-          {s.features.map((f) => <li>{f}</li>)}
-        </ul>
+        <div class="svc__list">
+          <p class="micro muted">{s.listIntro}</p>
+          <ul>
+            {s.list.map((f) => <li>{f}</li>)}
+          </ul>
+        </div>
+        {s.closer && <p class="svc__closer">{s.closer}</p>}
       </div>
       <figure class="svc__figure" data-reveal>
         <div class={`svc__media media media--zoom ${reverse ? 'media--cut-bl' : 'media--cut'}`}>
@@ -26,16 +32,6 @@ const num = String(index + 1).padStart(2, '0');
         </div>
       </figure>
     </div>
-
-    <ol class="svc__steps" data-reveal aria-label={`How we approach ${s.name.toLowerCase()}`}>
-      {s.approach.map((step, i) => (
-        <li>
-          <span class="svc__step-dot" aria-hidden="true"></span>
-          <strong class="svc__step-title">{step.title}</strong>
-          <span class="caption muted">{step.text}</span>
-        </li>
-      ))}
-    </ol>
   </div>
 </section>
 
@@ -44,39 +40,24 @@ const num = String(index + 1).padStart(2, '0');
   .svc__main { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: start; }
   .svc--reverse .svc__copy { order: 2; }
   .svc__copy { position: relative; display: grid; gap: 18px; align-content: start; }
-  .svc__copy .h2 { max-width: 16ch; }
-  .svc__summary { font-size: var(--r5-lead); line-height: 1.45; font-weight: 500; max-width: 30ch; }
+  .svc__copy .h2 { max-width: 18ch; }
+  .svc__copy :global(.quote) { margin: 6px 0 4px; }
+  .svc__line { font-size: var(--r5-lead); line-height: 1.45; font-weight: 600; max-width: 32ch; }
   .svc__copy .body { max-width: 62ch; }
-  .svc__features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--r5-border); }
-  .svc__features li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.5; }
-  .svc__features li::before { content: ''; position: absolute; left: 0; top: 0.42em; width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); }
-  .svc__features li::after { content: ''; position: absolute; left: 3.5px; top: calc(0.42em + 3.5px); width: 3px; height: 3px; border-radius: 50%; background: var(--r5-accent); }
-  .svc__figure { position: sticky; top: calc(var(--r5-header-h) + 32px); }
+  .svc__list { display: grid; gap: 14px; margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--r5-border); }
+  .svc__list ul { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+  .svc__list li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.5; }
+  .svc__list li::before { content: ''; position: absolute; left: 0; top: 0.42em; width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); }
+  .svc__list li::after { content: ''; position: absolute; left: 3.5px; top: calc(0.42em + 3.5px); width: 3px; height: 3px; border-radius: 50%; background: var(--r5-accent); }
+  .svc__closer { font-weight: 600; padding-top: 4px; }
+  .svc__figure { position: sticky; top: calc(var(--r5-header-h) + 72px); }
   .svc__media { aspect-ratio: 4 / 5; }
   .svc__media :global(img) { position: absolute; inset: 0; }
-
-  .svc__steps { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 56px; padding-top: 28px; }
-  .svc__steps::before { content: ''; position: absolute; left: 0; right: 0; top: 5px; height: 1px; background: var(--r5-border); transform-origin: left; transform: scaleX(var(--drawn, 1)); transition: transform 1400ms var(--r5-ease-out); }
-  :global(.js) .svc__steps:not(.is-in)::before { --drawn: 0; }
-  .svc__steps li { position: relative; display: grid; gap: 6px; align-content: start; cursor: default; }
-  /* Hover: the step's stretch of the line draws in and its dot fills */
-  .svc__steps li::before { content: ''; position: absolute; left: 0; right: -24px; top: -23px; height: 1px; background: var(--r5-charcoal); transform: scaleX(0); transform-origin: left; transition: transform 520ms var(--r5-ease-out); }
-  .svc__steps li:last-child::before { right: 0; }
-  .svc__steps li:hover::before { transform: scaleX(1); }
-  .svc__steps li .caption { transition: color var(--r5-dur-base) var(--r5-ease); }
-  .svc__steps li:hover .caption { color: var(--r5-charcoal); }
-  .svc__step-dot { position: absolute; top: -28px; left: 0; z-index: 1; width: 11px; height: 11px; border-radius: 50%; background: var(--r5-white); box-shadow: inset 0 0 0 1.5px var(--r5-charcoal); transition: background-color var(--r5-dur-base) var(--r5-ease), transform var(--r5-dur-base) var(--r5-ease-out); }
-  .svc__steps li:hover .svc__step-dot { background: var(--r5-charcoal); transform: scale(1.25); }
-  .svc__step-title { font-size: 17px; font-weight: 600; }
-
   @media (max-width: 900px) {
     .svc__main { grid-template-columns: 1fr; gap: 40px; }
     .svc--reverse .svc__copy { order: 0; }
     .svc__figure { position: static; }
     .svc__media { aspect-ratio: 16 / 11; }
-    .svc__steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
-    .svc__steps::before, .svc__steps li::before { display: none; }
-    .svc__step-dot { top: -18px; }
   }
-  @media (max-width: 560px) { .svc__features { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .svc__list ul { grid-template-columns: 1fr; } }
 </style>

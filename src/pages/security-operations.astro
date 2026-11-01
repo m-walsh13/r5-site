@@ -1,6 +1,6 @@
 ---
-// Security Operations — per sitemap: Overview · 4 services · 24/7 + Confidentiality
-// · Case studies · Contact us · FAQs
+// Security Operations — client copy. Overview + menu · 3 services · How we work ·
+// 24/7 + Confidentiality · Case study · Contact · FAQs (sitemap).
 import Base from '../layouts/Base.astro';
 import PillarHero from '../components/PillarHero.astro';
 import ServiceRail from '../components/ServiceRail.astro';
@@ -10,32 +10,22 @@ import SectionHead from '../components/SectionHead.astro';
 import CaseStudies from '../components/CaseStudies.astro';
 import ContactBand from '../components/ContactBand.astro';
 import Faqs from '../components/Faqs.astro';
+import Process from '../components/Process.astro';
 import Ring from '../components/Ring.astro';
 import Status from '../components/Status.astro';
 import Img from '../components/Img.astro';
 import { securityOperations } from '../data/services';
-import { operationsPage as page } from '../data/pages';
+import { operationsPage as page, operationsIntro } from '../data/pages';
 import { faqSchema, servicesSchema, breadcrumbSchema } from '../data/schema';
 
 const schema = [
   servicesSchema('Security operations services', '/security-operations/', securityOperations),
   faqSchema(page.faqs),
-  breadcrumbSchema('Security Operations', '/security-operations/'),
+  breadcrumbSchema(operationsIntro.name, '/security-operations/'),
 ];
 ---
 <Base title={page.meta.title} description={page.meta.description} schema={schema}>
-  <PillarHero
-    crumb="Security Operations"
-    kicker={page.hero.kicker}
-    title={page.hero.title}
-    lead={page.hero.lead}
-    body={page.hero.body}
-    image="lobby"
-    services={securityOperations}
-    count="04"
-  >
-    <p class="body body-secondary">{page.hero.sectorsLine}</p>
-  </PillarHero>
+  <PillarHero pillar={operationsIntro} line="operations" image="reception" services={securityOperations} />
 
   <div class="services-wrap">
     <ServiceRail services={securityOperations} label="Security Operations services" />
@@ -47,8 +37,10 @@ const schema = [
     ))}
   </div>
 
+  <Process kicker={page.process.kicker} title={page.process.title} steps={page.process.steps} />
+
   <!-- 24/7 Deployment + Confidentiality -->
-  <section class="section always" aria-labelledby="always-title" data-services-end>
+  <section class="section always" aria-labelledby="always-title">
     <div class="container">
       <SectionHead kicker={page.always.kicker} title={page.always.title} id="always-title" />
       <div class="always__grid" data-reveal>
@@ -83,14 +75,14 @@ const schema = [
     </div>
   </section>
 
-  <section class="section section--band" aria-labelledby="cases-title">
+  <section class="section" aria-labelledby="cases-title">
     <div class="container">
       <SectionHead kicker={page.cases.kicker} title={page.cases.title} lead={page.cases.lead} id="cases-title" />
       <CaseStudies item={page.cases.item} />
     </div>
   </section>
 
-  <ContactBand line="operations" kicker={page.contact.kicker} title={page.contact.title} lead={page.contact.lead} />
+  <ContactBand line="operations" kicker={page.contact.kicker} title={page.contact.title} />
 
   <Faqs title="Security Operations FAQs" items={page.faqs} />
 </Base>

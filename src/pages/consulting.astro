@@ -1,56 +1,51 @@
 ---
-// Consulting — per sitemap: Overview · 7 services · Case studies · Contact us · FAQs
+// Consultancy & Intelligence — client copy. Order: overview + numbered menu ·
+// 5 services · How we work · Case study · Contact · FAQs (sitemap).
 import Base from '../layouts/Base.astro';
 import PillarHero from '../components/PillarHero.astro';
 import ServiceRail from '../components/ServiceRail.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
 import CutRule from '../components/CutRule.astro';
+import Process from '../components/Process.astro';
 import SectionHead from '../components/SectionHead.astro';
 import CaseStudies from '../components/CaseStudies.astro';
 import ContactBand from '../components/ContactBand.astro';
 import Faqs from '../components/Faqs.astro';
 import { consulting } from '../data/services';
-import { consultingPage as page } from '../data/pages';
+import { consultingPage as page, consultingIntro } from '../data/pages';
 import { faqSchema, servicesSchema, breadcrumbSchema } from '../data/schema';
 
 const schema = [
-  servicesSchema('Security consulting services', '/consulting/', consulting),
+  servicesSchema('Consultancy & Intelligence services', '/consulting/', consulting),
   faqSchema(page.faqs),
-  breadcrumbSchema('Consulting', '/consulting/'),
+  breadcrumbSchema(consultingIntro.name, '/consulting/'),
 ];
 ---
 <Base title={page.meta.title} description={page.meta.description} schema={schema}>
-  <PillarHero
-    crumb="Consulting"
-    kicker={page.hero.kicker}
-    title={page.hero.title}
-    lead={page.hero.lead}
-    body={page.hero.body}
-    image="consultingTable"
-    services={consulting}
-    count="07"
-  />
+  <PillarHero pillar={consultingIntro} line="consulting" image="consultingTable" services={consulting} />
 
   <div class="services-wrap">
-    <ServiceRail services={consulting} label="Consulting services" />
+    <ServiceRail services={consulting} label="Consultancy & Intelligence services" />
     {consulting.map((s, i) => (
       <Fragment>
         {i > 0 && <CutRule at={i % 2 ? 38 : 62} />}
-        <ServiceBlock service={s} index={i} line="Consulting" reverse={i % 2 === 1} />
+        <ServiceBlock service={s} index={i} line="Consultancy & Intelligence" reverse={i % 2 === 1} />
       </Fragment>
     ))}
   </div>
 
-  <section class="section section--band" aria-labelledby="cases-title" data-services-end>
+  <Process kicker={page.process.kicker} title={page.process.title} steps={page.process.steps} />
+
+  <section class="section" aria-labelledby="cases-title">
     <div class="container">
       <SectionHead kicker={page.cases.kicker} title={page.cases.title} lead={page.cases.lead} id="cases-title" />
       <CaseStudies item={page.cases.item} />
     </div>
   </section>
 
-  <ContactBand line="consulting" kicker={page.contact.kicker} title={page.contact.title} lead={page.contact.lead} />
+  <ContactBand line="consulting" kicker={page.contact.kicker} title={page.contact.title} />
 
-  <Faqs title="Consulting FAQs" items={page.faqs} />
+  <Faqs title="Consultancy & Intelligence FAQs" items={page.faqs} />
 </Base>
 
 <style>

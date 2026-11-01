@@ -5,8 +5,9 @@ import Button from './Button.astro';
 import Ring from './Ring.astro';
 import Kicker from './Kicker.astro';
 import { site, bookHref } from '../data/site';
-interface Props { kicker: string; title: string; lead: string; line?: 'consulting' | 'operations' }
-const { kicker, title, lead, line } = Astro.props;
+import { contactCta } from '../data/pages';
+interface Props { kicker: string; title: string; lead?: string; line?: 'consulting' | 'operations' }
+const { kicker, title, lead = contactCta.lead, line } = Astro.props;
 const href = line ? link(`/contact/?line=${line}#enquiry`) : bookHref;
 ---
 <section class="section" aria-labelledby="contact-band-title">
@@ -17,7 +18,7 @@ const href = line ? link(`/contact/?line=${line}#enquiry`) : bookHref;
         <h2 class="h2" id="contact-band-title">{title}</h2>
         <p class="lead">{lead}</p>
         <div class="btn-row">
-          <Button href={href}>Speak to a consultant</Button>
+          <Button href={href}>{contactCta.cta}</Button>
           <Button href={site.phoneHref} variant="ghost" onDark>{site.phone}</Button>
         </div>
       </div>

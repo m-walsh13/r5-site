@@ -20,7 +20,7 @@ const year = new Date().getFullYear();
 
       <nav class="site-footer__cols" aria-label="Footer">
         <div>
-          <p class="label accent"><a href={link('/consulting/')}>Consulting</a></p>
+          <p class="label accent"><a href={link('/consulting/')}>Consultancy &amp; Intelligence</a></p>
           <ul class="site-footer__svc">
             {consulting.map((s) => <li><a href={link(`/consulting/#${s.id}`)}>{s.name}</a></li>)}
           </ul>

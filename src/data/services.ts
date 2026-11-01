@@ -1,303 +1,197 @@
-// The canonical service list — 7 Consulting, 4 Security Operations — from
-// r5-kit/docs/content.md. Do not add services here. SEO phrases are worked
-// into copy and headings, never turned into new services.
-//
-// FILLER COPY: written to brief for layout and SEO review. Client to confirm.
+// Services — client-approved copy (R5 Global Website Copy, 28 Oct 2026).
+// 5 Consultancy & Intelligence, 3 Security Operations. Each block keeps the
+// client's structure: quote → line → body → "We can help with" → closer.
 import type { ImageKey } from './images';
+
+export type Quote = { text: string; cite: string };
 
 export type Service = {
   id: string;
   name: string;
   /** Short label for the sticky service index. */
   short: string;
-  summary: string;
+  quote?: Quote;
+  line: string;
   body: string[];
-  approach: { title: string; text: string }[];
-  features: string[];
-  sectors: string[];
+  listIntro: string;
+  list: string[];
+  closer?: string;
   image: ImageKey;
   caption: string;
 };
 
 export const consulting: Service[] = [
   {
-    id: 'physical-penetration-testing',
-    short: 'Penetration testing',
-    name: 'Physical penetration testing',
-    summary: 'We try to get in, so nobody else does.',
+    id: 'security-risk-consultancy',
+    name: 'Security & Risk Consultancy',
+    short: 'Security & risk',
+    quote: { text: 'We suffer more often in imagination than in reality.', cite: 'Seneca' },
+    line: "Some things are worth worrying about. Let's work out which.",
     body: [
-      'Physical penetration testing shows how your buildings, people and procedures hold up against a determined intruder. Under an agreed scope and with written authorisation, we attempt to gain access the way a real adversary would — testing reception, badges, doors, deliveries and the habits of the people inside.',
-      'We carry out physical penetration testing across the UK, and it is particularly useful for organisations facing activist threats, preparing for an audit or protecting restricted areas. You get evidence, not opinion.',
+      'We look at the risks you face and the measures you rely on: what’s working, where the gaps are and what deserves your attention.',
+      'Then we help you put a sensible plan in place, with clear priorities and practical advice that fits your business, your people and your budget.',
+      'If you need someone to stay involved and manage it, we can do that too.',
     ],
-    approach: [
-      { title: 'Scope', text: 'Agree the targets, the rules of engagement and exactly who knows.' },
-      { title: 'Reconnaissance', text: 'Study the site, its routines and what can be learned from outside.' },
-      { title: 'Test', text: 'Attempt entry, record everything and stop precisely where agreed.' },
-      { title: 'Debrief', text: 'Walk your team through what worked, what failed and what to fix first.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Threat and risk assessments',
+      'Security audits and benchmarking',
+      'Security policies, procedures and outsourced management',
+      'Licensing support',
     ],
-    features: [
-      'Fully authorised, tightly scoped',
-      'Evidence-led reporting',
-      'Prioritised, practical fixes',
-      'Suited to activist-threat environments',
-      'UK-wide, with international reach',
+    image: 'planning',
+    caption: 'Risk · understood before it’s managed',
+  },
+  {
+    id: 'physical-penetration-testing',
+    name: 'Physical Penetration Testing',
+    short: 'Penetration testing',
+    quote: { text: 'Men of Troy, trust not the horse.', cite: 'Virgil, The Aeneid' },
+    line: 'An early lesson in access control.',
+    body: [
+      'A convincing story can still open doors that should stay closed.',
+      'We carry out controlled, authorised attempts to get past your physical security, testing how your people, procedures and protective measures hold up in practice.',
+      'You get clear evidence of what happened, what worked and where the gaps are, along with practical advice on closing them.',
     ],
-    sectors: ['Defence', 'Corporate headquarters', 'Activist-threat'],
+    listIntro: 'We can test:',
+    list: [
+      'Perimeters, buildings and restricted areas',
+      'Access controls and staff challenge procedures',
+      'Detection, escalation and response',
+    ],
+    closer: 'Better to find out with us.',
     image: 'accessControl',
     caption: 'Access points · tested, not assumed',
   },
   {
-    id: 'supporting-intelligence-operations',
-    short: 'Intelligence',
-    name: 'Supporting intelligence operations',
-    summary: 'Research and analysis that sits behind better decisions.',
-    body: [
-      'Some decisions need more than instinct. We support clients and their teams with open-source research, discreet enquiries and analysis — gathered lawfully, verified carefully and delivered in plain English.',
-      'We can work as an extension of an in-house security or risk function, or stand up a focused piece of work around a single, difficult question.',
-    ],
-    approach: [
-      { title: 'Brief', text: 'Define the question and what a useful answer looks like.' },
-      { title: 'Collect', text: 'Lawful open-source research and discreet enquiries.' },
-      { title: 'Verify', text: 'Corroborate, grade and strip out the noise.' },
-      { title: 'Report', text: 'A clear assessment, with confidence levels and next steps.' },
-    ],
-    features: [
-      'Lawful, auditable methods',
-      'Graded, sourced reporting',
-      'Works alongside in-house teams',
-      'Strict need-to-know handling',
-    ],
-    sectors: ['Media-related support', 'Corporate', 'Ultra-high-net-worth'],
-    image: 'analyst',
-    caption: 'Analysis · verified before it is reported',
-  },
-  {
     id: 'corporate-investigations',
+    name: 'Corporate Investigations',
     short: 'Investigations',
-    name: 'Corporate investigations',
-    summary: 'Facts first. Conclusions second.',
+    quote: { text: 'A liar should have a good memory.', cite: 'Roman proverb, recorded by Quintilian' },
+    line: 'We’re professionally difficult to fob off.',
     body: [
-      'When something goes wrong inside an organisation — fraud, theft, leaks, misconduct or a dispute with a third party — you need to know what happened, and be able to show it. Our corporate investigations are discreet, methodical and built to stand up to scrutiny.',
-      'We work with legal, HR and leadership teams to gather evidence properly, so your next step rests on what can be demonstrated rather than what is suspected.',
+      'When accounts conflict, questions go unanswered or something simply doesn’t add up, we help you establish the facts.',
+      'We shape each investigation around what you need to know, drawing on discreet enquiries, research, surveillance and evidence gathering. We follow the evidence, test explanations and make clear what we can substantiate.',
+      'You get clear findings and supporting evidence to help you decide what to do next.',
     ],
-    approach: [
-      { title: 'Assess', text: 'Understand the allegation, the stakes and the constraints.' },
-      { title: 'Plan', text: 'Set a lawful, proportionate line of enquiry.' },
-      { title: 'Investigate', text: 'Gather documents, data and accounts — quietly.' },
-      { title: 'Report', text: 'Clear findings your advisers can act on.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Suspected wrongdoing and internal concerns',
+      'Discreet surveillance and enquiries',
+      'Evidence gathering and reporting',
     ],
-    features: [
-      'Discreet from the first call',
-      'Evidence gathered with proceedings in mind',
-      'Interviews and document review',
-      'Close working with legal counsel',
-    ],
-    sectors: ['Sensitive investigations', 'Corporate', 'Media-related support'],
     image: 'filing',
     caption: 'Records · reviewed in confidence',
   },
   {
-    id: 'country-regional-risk-assessments',
-    short: 'Risk assessments',
-    name: 'Country & regional risk assessments',
-    summary: 'Know the ground before you stand on it.',
+    id: 'intelligence-threat-monitoring',
+    name: 'Intelligence & Threat Monitoring',
+    short: 'Intelligence',
+    quote: { text: 'He keeps furthest from danger who looks out while he is safe.', cite: 'Publilius Syrus' },
+    line: 'Hindsight is a bit late for our liking.',
     body: [
-      'Opening an office, sending a team or moving an executive somewhere unfamiliar? Our security risk assessments set out the threats that actually apply — political, criminal, environmental and reputational — and what to do about each one.',
-      'Closer to home, we carry out physical security risk assessments for sites across London and the UK, looking at the building, the people in it and the procedures around it.',
+      'We monitor developments that could affect your people, premises and operations, from planned disruption to emerging threats.',
+      'We assess what’s relevant, check the credibility of reporting and explain what it means for your business. You get clear updates and useful context to help you plan ahead and respond as things change.',
     ],
-    approach: [
-      { title: 'Scope', text: 'Where, who, for how long and what matters most.' },
-      { title: 'Research', text: 'Current, sourced analysis of the local threat picture.' },
-      { title: 'Visit', text: 'On-the-ground assessment where it adds value.' },
-      { title: 'Advise', text: 'Prioritised recommendations, in plain English.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Threat and disruption monitoring',
+      'Location and event intelligence',
+      'Regular briefings and tailored reporting',
     ],
-    features: [
-      'Country, city and site-level assessments',
-      'Travel and deployment briefings',
-      'Physical security risk assessments across the UK',
-      'Updated as the picture changes',
-    ],
-    sectors: ['Corporate', 'Media-related support', 'Ultra-high-net-worth'],
+    closer: 'A little notice can make a considerable difference.',
     image: 'worldMap',
-    caption: 'Threat picture · country, city, site',
+    caption: 'Threat picture · watched, not guessed',
   },
   {
-    id: 'loss-prevention',
-    short: 'Loss prevention',
-    name: 'Loss prevention',
-    summary: 'Stop the leak, not just the thief.',
+    id: 'technical-surveillance-countermeasures',
+    name: 'Technical Surveillance Countermeasures',
+    short: 'TSCM',
+    quote: { text: 'If you wish another to keep your secret, first keep it yourself.', cite: 'Seneca' },
+    line: 'Slightly impractical in a board meeting.',
     body: [
-      'Loss rarely has a single cause. Stock, equipment, cash and information disappear through a mix of weak processes, blind spots and opportunity. We look at the whole picture — people, systems and premises — and close the gaps that matter most.',
-      'The result is fewer losses and a clearer view of where risk actually sits in your operation. Often without adding a single guard.',
+      'Some conversations need to happen. They just don’t need an uninvited audience.',
+      'Our technical surveillance countermeasures (TSCM) service helps protect sensitive information by checking for covert listening and recording equipment.',
+      'We carry out discreet physical inspections and technical sweeps, tailored to your premises and concerns. You get clear findings and practical advice on reducing the risk of someone listening in.',
     ],
-    approach: [
-      { title: 'Review', text: 'Walk the operation and follow the losses.' },
-      { title: 'Identify', text: 'Find the process gaps and blind spots.' },
-      { title: 'Recommend', text: 'Practical controls that fit how you work.' },
-      { title: 'Embed', text: 'Help your team make the changes stick.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Technical sweeps of offices and meeting rooms',
+      'Checks for concealed listening and recording devices',
+      'Advice on protecting confidential conversations',
     ],
-    features: [
-      'Retail, warehouse and site reviews',
-      'Process and controls assessment',
-      'Support for internal investigations',
-      'Controls that fit the operation',
-    ],
-    sectors: ['Retail', 'Hospitality', 'Construction'],
-    image: 'warehouse',
-    caption: 'Stock · accounted for',
-  },
-  {
-    id: 'counterfeit-supply-chain-investigations',
-    short: 'Supply chain',
-    name: 'Counterfeit & supply chain investigations',
-    summary: "Find out where it's really coming from.",
-    body: [
-      'Counterfeit goods and compromised supply chains cost more than revenue. They damage trust, create safety risks and put your brand in the wrong hands. We trace products, suppliers and routes to establish where the problem starts and who is behind it.',
-      'Findings are built to support action — commercial, civil or criminal — alongside your legal advisers.',
-    ],
-    approach: [
-      { title: 'Identify', text: 'Confirm what is fake, diverted or compromised.' },
-      { title: 'Trace', text: 'Follow products, money and routes back to source.' },
-      { title: 'Evidence', text: 'Build a record that will stand up.' },
-      { title: 'Act', text: 'Support enforcement with your advisers.' },
-    ],
-    features: [
-      'Marketplace and supplier enquiries',
-      'Supply chain due diligence',
-      'International investigations',
-      'Evidence packs for legal action',
-    ],
-    sectors: ['Retail', 'Corporate', 'Commercial'],
-    image: 'port',
-    caption: 'Supply routes · traced to source',
-  },
-  {
-    id: 'asset-people-tracing',
-    short: 'Tracing',
-    name: 'Asset & people tracing',
-    summary: 'Locating what — and who — has gone missing.',
-    body: [
-      "Whether it's a debtor, a missing beneficiary, a witness or assets moved out of reach, our tracing work combines comprehensive research with discreet enquiries to find what you need — in the UK and internationally.",
-      'Every case is handled in confidence, and every finding is verified before it reaches you.',
-    ],
-    approach: [
-      { title: 'Brief', text: 'What is known, what is needed and why.' },
-      { title: 'Research', text: 'Comprehensive records and open-source work.' },
-      { title: 'Enquire', text: 'Discreet enquiries, at home and abroad.' },
-      { title: 'Verify', text: 'Confirmed findings, with legal support where needed.' },
-    ],
-    features: [
-      'Confidentiality',
-      'Comprehensive research',
-      'International expertise',
-      'Expert analysis',
-      'Legal support',
-    ],
-    sectors: ['Ultra-high-net-worth', 'Sensitive investigations', 'Corporate'],
-    image: 'mapPins',
-    caption: 'Last known · confirmed, not guessed',
+    closer: 'Private should mean private.',
+    image: 'meetingRoom',
+    caption: 'Meeting rooms · swept, not assumed',
   },
 ];
 
 export const securityOperations: Service[] = [
   {
-    id: 'manned-guarding',
-    short: 'Manned guarding',
-    name: 'Manned guarding',
-    summary: 'A visible presence, with a plan behind it.',
+    id: 'guarding-asset-protection',
+    name: 'Guarding & Asset Protection',
+    short: 'Guarding',
+    quote: { text: 'A man is known by the company he keeps.', cite: 'Aesop' },
+    line: 'We’re rather particular about ours.',
     body: [
-      'We provide professional, SIA-licensed officers hand-selected for each deployment. Every guard is matched to the environment and briefed on your operational risks — visible presence, control and reliability. Not just manpower: precision in protection.',
-      'From office security guards and front of house security to corporate concierge security, our officers set the tone for your building before anyone reaches the lift. Security guarding services across London, from a single reception desk to a multi-site estate.',
+      'We provide carefully selected SIA-licensed security officers to protect your people, premises and assets. Properly briefed, actively supervised and backed by R5’s leadership.',
+      'People who notice what’s out of place, know how to welcome your visitors and can handle an awkward conversation without making it considerably more awkward.',
+      'From a gallery reception to a sensitive site, we match the team to the setting, the risks and the way your business works.',
     ],
-    approach: [
-      { title: 'Assess', text: 'Understand the site, its people and its risks.' },
-      { title: 'Select', text: 'Hand-pick officers who suit the environment.' },
-      { title: 'Brief', text: 'Site-specific briefing before the first shift.' },
-      { title: 'Supervise', text: 'Ongoing oversight and clear reporting.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Guarding and asset protection',
+      'Front-of-house security and access control',
+      'Galleries and exhibitions',
+      'SC-cleared personnel for sensitive environments',
     ],
-    features: [
-      'SIA-licensed, hand-selected officers',
-      'Front of house and corporate concierge security',
-      'Briefed on your operational risks',
-      'Deployed 24 hours a day, 365 days a year',
-    ],
-    sectors: ['Commercial property', 'Hospitality', 'Corporate offices'],
+    closer: 'Good people. Good judgement. Fewer surprises.',
     image: 'lobby',
     caption: 'Front of house · first impression, first line',
   },
   {
-    id: 'asset-protection',
-    short: 'Asset protection',
-    name: 'Asset protection',
-    summary: "Protection placed where the risk is — not spread thinly everywhere.",
+    // CLIENT TO CONFIRM: heading reads "Event & Film, TV & Production Security"
+    // in the service section but "Event & Production Security" in the menu.
+    id: 'event-production-security',
+    name: 'Event & Production Security',
+    short: 'Events & production',
+    line: 'Quite happy to stay out of the spotlight.',
     body: [
-      'High-value asset protection for property, stock, equipment, art and information. We combine physical security with an understanding of how assets are actually targeted, so protection goes where it counts.',
-      'For commercial property security in London, that might mean protecting a vacant building, controlling access during a refurbishment, or securing a site through a sale.',
+      'We provide security teams and stewards for public events, private functions and film and production work.',
+      'We work with organisers, venues and crews to understand the plans, the people and the practicalities. Who needs to be where, what needs protecting and how the day is meant to run.',
+      'Then we put the right team in place, properly briefed and ready to adapt when the running order becomes more of a suggestion.',
+      'From welcoming guests to protecting equipment, we help keep things running smoothly.',
     ],
-    approach: [
-      { title: 'Value', text: 'Establish what matters most and why.' },
-      { title: 'Threat', text: 'Understand how it could be targeted.' },
-      { title: 'Protect', text: 'Physical measures and people, in proportion.' },
-      { title: 'Review', text: 'Adjust as the asset or the risk changes.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Public events and private functions',
+      'Film and production security',
+      'Stewarding and access control',
+      'Protection for crews, equipment and working areas',
     ],
-    features: [
-      'Commercial property security',
-      'High-value asset protection',
-      'Risk-led security plans',
-      'Discreet or visible, as required',
-    ],
-    sectors: ['Commercial property', 'Ultra-high-net-worth', 'Construction'],
-    image: 'gallery',
-    caption: 'High-value assets · protected in proportion',
+    closer: 'Your event. Our full attention.',
+    image: 'media',
+    caption: 'Events & production · on schedule',
   },
   {
-    id: 'close-executive-protection',
-    short: 'Close protection',
-    name: 'Close & executive protection',
-    summary: 'Discreet protection for people who need to keep moving.',
+    id: 'property-site-security',
+    name: 'Property & Site Security',
+    short: 'Property & site',
+    line: 'Empty doesn’t mean up for grabs.',
     body: [
-      'Discreet, intelligence-led protection for corporate leaders, VIPs and visiting teams. We deliver safety through planning, professionalism and forward thinking — so the principal gets on with the day, and the day goes to plan.',
-      'Protection is planned from the route backwards: venues, travel, timings and people are assessed before anyone steps out of the car.',
+      'Vacant, under construction or waiting to open — a property still needs looking after when there’s nobody making the tea.',
+      'We put practical protection in place around your site, its condition and the risks. That might mean security officers, CCTV and alarms, secure boarding or a combination that makes sense for the property.',
+      'We bring these measures together with monitoring and clear arrangements for responding when something needs attention. As the site changes, we help you adjust the protection around it.',
     ],
-    approach: [
-      { title: 'Advance', text: 'Routes, venues and timings assessed ahead.' },
-      { title: 'Plan', text: 'Contingencies agreed before they are needed.' },
-      { title: 'Protect', text: 'Low-profile, close and composed.' },
-      { title: 'Debrief', text: 'Lessons fed into the next movement.' },
+    listIntro: 'We can help with:',
+    list: [
+      'Vacant, construction and pre-opening sites',
+      'CCTV, intruder alarms and monitoring',
+      'Security boarding and doors',
+      'Site guarding and response coordination',
     ],
-    features: [
-      'Executive and VIP protection',
-      'Visiting teams and delegations',
-      'Residential security for private clients',
-      'Low-profile by default',
-    ],
-    sectors: ['Ultra-high-net-worth', 'Corporate', 'Media-related support'],
-    image: 'executiveCar',
-    caption: 'Movement · planned from the route back',
-  },
-  {
-    id: 'security-patrols-mobile-response',
-    short: 'Patrols & response',
-    name: 'Security patrols & mobile response',
-    summary: 'Eyes on every site, not just the biggest one.',
-    body: [
-      "Planned and randomised patrols and alarm response for sites that don't need a permanent guard — or need backup when something happens. Routes are set by risk, and every visit is logged.",
-      'For clients with several properties, mobile patrols form the backbone of multi-site security management: one plan, one point of contact and consistent standards at every location.',
-    ],
-    approach: [
-      { title: 'Map', text: 'Plot every site and its risk profile.' },
-      { title: 'Route', text: 'Patrols planned by risk, varied by design.' },
-      { title: 'Respond', text: 'Attend alarms and incidents promptly.' },
-      { title: 'Report', text: 'Every visit logged and shared.' },
-    ],
-    features: [
-      'Planned and randomised patrols',
-      'Alarm and incident response',
-      'Multi-site security management',
-      'Logged, reported visits',
-    ],
-    sectors: ['Construction', 'Retail', 'Commercial property'],
-    image: 'londonStreet',
-    caption: 'Multi-site · one plan, every location',
+    closer: 'You’ve got plans for the place. We’ll help protect them.',
+    image: 'construction',
+    caption: 'Sites · looked after, empty or not',
   },
 ];

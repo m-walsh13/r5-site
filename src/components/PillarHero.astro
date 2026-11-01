@@ -1,38 +1,37 @@
 ---
 import { link } from '../lib/link';
-// Overview section for a pillar page: positioning first, then the service index.
+// Pillar page opening — the client's overview copy and numbered menu
+// (placement note: "use the overview and numbered menu as the page opening").
 import Button from './Button.astro';
 import Img from './Img.astro';
-import Kicker from './Kicker.astro';
+import Quote from './Quote.astro';
 import type { Service } from '../data/services';
 import type { ImageKey } from '../data/images';
-import { bookHref } from '../data/site';
+import type { Pillar } from '../data/pages';
+import { contactCta } from '../data/pages';
 
 interface Props {
-  crumb: string;
-  kicker: string;
-  title: string;
-  lead: string;
-  body: string;
+  pillar: Pillar;
+  line: 'consulting' | 'operations';
   image: ImageKey;
   services: Service[];
-  count: string;
 }
-const { crumb, kicker, title, lead, body, image, services, count } = Astro.props;
+const { pillar, line, image, services } = Astro.props;
+const count = String(services.length).padStart(2, '0');
 ---
 <section class="phero" aria-labelledby="page-title">
   <div class="container">
     <nav class="phero__crumb micro" aria-label="Breadcrumb">
-      <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
+      <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">{pillar.name}</span>
     </nav>
 
     <div class="phero__top">
       <div class="phero__copy">
-        <p class="label accent phero__kicker">{kicker}</p>
-        <h1 class="h1 phero__title" id="page-title">{title}</h1>
-        <p class="lead phero__lead">{lead}</p>
+        <h1 class="h1 phero__title" id="page-title">{pillar.name}</h1>
+        <Quote quote={pillar.quote} class="phero__quote" />
+        <p class="lead phero__lead">{pillar.line}</p>
         <div class="btn-row phero__cta">
-          <Button href={bookHref}>Speak to a consultant</Button>
+          <Button href={link(`/contact/?line=${line}#enquiry`)}>{contactCta.cta}</Button>
           <Button href="#services-index" variant="ghost">See the services</Button>
         </div>
       </div>
@@ -42,16 +41,15 @@ const { crumb, kicker, title, lead, body, image, services, count } = Astro.props
         </div>
         <div class="phero__count" aria-hidden="true">
           <span class="phero__count-n">{count}</span>
-          <span class="micro muted">Disciplines</span>
+          <span class="micro muted">Services</span>
         </div>
       </figure>
     </div>
 
     <div class="phero__overview" id="services-index">
       <div class="phero__body" data-reveal>
-        <Kicker label="Overview" />
-        <p class="phero__body-text">{body}</p>
-        <slot />
+        {pillar.body.map((p) => <p class="phero__body-text">{p}</p>)}
+        {pillar.closer && <p class="phero__closer">{pillar.closer}</p>}
       </div>
       <ol class="phero__index" data-reveal>
         {services.map((s, i) => (
@@ -78,9 +76,10 @@ const { crumb, kicker, title, lead, body, image, services, count } = Astro.props
   .phero__top { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: end; }
   .phero__copy { display: grid; gap: 28px; justify-items: start; padding-bottom: 24px; }
   .phero__title { max-width: 14ch; }
-  .phero__lead { max-width: 44ch; }
-  .phero__kicker, .phero__title, .phero__lead, .phero__cta { animation: phero-up 900ms var(--r5-ease-out) both; }
-  .phero__title { animation-delay: 80ms; }
+  .phero__lead { max-width: 30ch; color: var(--r5-charcoal); font-weight: 600; }
+  .phero__closer { font-weight: 600; }
+  .phero__title, .phero__copy :global(.phero__quote), .phero__lead, .phero__cta { animation: phero-up 900ms var(--r5-ease-out) both; }
+  .phero__copy :global(.phero__quote) { animation-delay: 80ms; }
   .phero__lead { animation-delay: 200ms; }
   .phero__cta { animation-delay: 320ms; }
   .phero__figure { position: relative; animation: phero-in 1200ms var(--r5-ease-out) 120ms both; }
@@ -97,7 +96,6 @@ const { crumb, kicker, title, lead, body, image, services, count } = Astro.props
 
   .phero__overview { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; margin-top: var(--r5-section); padding-top: 48px; border-top: 1px solid var(--r5-border); }
   .phero__body { display: grid; gap: 22px; align-content: start; }
-  .phero__body :global(.kicker) { margin-bottom: 0; }
   .phero__body-text { font-size: 19px; line-height: 1.65; text-wrap: pretty; }
   .phero__index { border-top: 1px solid var(--r5-border); }
   .phero__index li { border-bottom: 1px solid var(--r5-border); }
@@ -127,6 +125,6 @@ const { crumb, kicker, title, lead, body, image, services, count } = Astro.props
     .phero__index-name { font-size: 17px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .phero__kicker, .phero__title, .phero__lead, .phero__cta, .phero__figure { animation: none; }
+    .phero__title, .phero__copy :global(.phero__quote), .phero__lead, .phero__cta, .phero__figure { animation: none; }
   }
 </style>

@@ -6,14 +6,15 @@ import BookingPanel from '../components/BookingPanel.astro';
 import Kicker from '../components/Kicker.astro';
 import Status from '../components/Status.astro';
 import Arrow from '../components/Arrow.astro';
-import { contactPage as page } from '../data/pages';
+import { contactPage as page, contactCta } from '../data/pages';
+import Button from '../components/Button.astro';
 import { site } from '../data/site';
 import { consulting, securityOperations } from '../data/services';
 import { breadcrumbSchema } from '../data/schema';
 
 const segments = [
-  { value: 'consulting', title: 'Consulting', text: 'Testing, investigations, risk assessment, tracing' },
-  { value: 'operations', title: 'Security Operations', text: 'Guarding, protection, patrols and response' },
+  { value: 'consulting', title: 'Consultancy & Intelligence', text: 'Risk consultancy, testing, investigations, intelligence, TSCM' },
+  { value: 'operations', title: 'Security Operations', text: 'Guarding, events and production, property and sites' },
   { value: 'unsure', title: 'Not sure yet', text: "Tell us the problem — we'll work out the rest" },
 ];
 const serviceOptions = [
@@ -34,6 +35,7 @@ const timings = ['Planning ahead', 'Within a month', 'Urgent'];
           <p class="label accent">{page.book.kicker}</p>
           <h1 class="h1" id="page-title">{page.book.title}</h1>
           <p class="lead">{page.book.lead}</p>
+          <div class="btn-row"><Button href="#enquiry">{contactCta.cta}</Button></div>
           <ul class="chero__direct">
             <li><span class="micro muted">Direct line</span><a class="chero__phone" href={site.phoneHref}>{site.phone}</a></li>
             <li><span class="micro muted">Based</span><span>London · Operating globally</span></li>

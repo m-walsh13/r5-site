@@ -1,0 +1,19 @@
+---
+// The client's classical quotes — a recurring device that opens each section.
+import type { Quote } from '../data/services';
+interface Props { quote: Quote; class?: string }
+const { quote, class: className = '' } = Astro.props;
+---
+<figure class={`quote ${className}`}>
+  <blockquote><p>“{quote.text}”</p></blockquote>
+  <figcaption class="micro">{quote.cite}</figcaption>
+</figure>
+
+<style>
+  .quote { display: grid; gap: 10px; margin: 0; padding-left: 18px; border-left: 2px solid var(--r5-accent); }
+  .quote blockquote { margin: 0; }
+  .quote p { font-size: var(--r5-lead); line-height: 1.45; font-weight: 500; letter-spacing: -0.005em; color: var(--r5-text-secondary); text-wrap: balance; }
+  .quote figcaption { color: var(--r5-text-secondary); }
+  .quote figcaption::before { content: '— '; }
+  :global(.on-dark) .quote p, :global(.on-dark) .quote figcaption { color: var(--r5-w-70); }
+</style>
