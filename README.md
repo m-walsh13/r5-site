@@ -41,4 +41,5 @@ the structure stays locked.
 - **Enquiry form** — validates and segments, but has no backend yet (`contact.astro`).
 - **Accreditation marks** — ring monograms stand in for official SIA / ACS / ICO logos.
 - **Photography** — Unsplash placeholders in muted colour, matched to content.
+- **Hero dial images** — Shad Thames placeholder. Add four same-framing versions (dawn, day, dusk, night) to `public/images/hero/` and point `src/data/heroDial.ts` at them; the dial then crossfades real photos instead of simulating the light.
 - **Privacy policy** — the form's consent line needs one to link to.
