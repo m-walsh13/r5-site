@@ -72,6 +72,8 @@ export const home = {
       'A physical security consultancy with the people to put plans into practice. Risk consultancy, penetration testing, investigations, intelligence and SIA-licensed guarding from London.',
   },
   opening: {
+    // NOT CLIENT COPY — eyebrow restored from the build version.
+    kicker: 'Risk & security consultancy · London',
     quote: { text: 'Let no act be done without a purpose.', cite: 'Marcus Aurelius' },
     title: 'Good advice. Especially when you’re paying for it.',
     body: [
@@ -80,6 +82,9 @@ export const home = {
       'We work out what’s needed, put it in place and stay involved. Every recommendation should have a reason. Everyone on site should know why they’re there.',
     ],
     cta: 'Let’s talk',
+    // NOT CLIENT COPY — secondary CTA and approach label kept from the build.
+    secondaryCta: 'Our services',
+    approachKicker: 'Our approach',
   },
   why: {
     kicker: 'Why R5',

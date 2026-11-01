@@ -33,16 +33,14 @@ const pillars = [
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero__grid">
       <div class="hero__copy">
-        <Quote quote={home.opening.quote} class="hero__quote" />
+        <p class="label accent hero__kicker">{home.opening.kicker}</p>
         <h1 class="h1 hero__title" id="hero-title">
           {words.map((w, i) => <Fragment><span class="w"><span style={`--w:${i}`}>{w}</span></span>{i < words.length - 1 && ' '}</Fragment>)}
         </h1>
         <p class="lead hero__lead">{home.opening.body[0]}</p>
-        <div class="hero__more">
-          {home.opening.body.slice(1).map((p) => <p class="body body-secondary">{p}</p>)}
-        </div>
         <div class="btn-row hero__cta">
           <Button href={contactHref}>{home.opening.cta}</Button>
+          <Button href="#services" variant="ghost">{home.opening.secondaryCta}</Button>
         </div>
         <Status class="hero__status" />
       </div>
@@ -52,6 +50,19 @@ const pillars = [
         <div class="hero__readout hero__readout--br micro">
           <span class="muted">LDN</span><span data-clock>--:--:--</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach: the opening's quote and the rest of its copy, given room -->
+  <section class="section section--band approach" aria-label={home.opening.approachKicker}>
+    <div class="container approach__grid" data-reveal>
+      <div class="approach__quote">
+        <Kicker label={home.opening.approachKicker} />
+        <Quote quote={home.opening.quote} />
+      </div>
+      <div class="approach__copy">
+        {home.opening.body.slice(1).map((p, i) => <p class={i === 0 ? 'approach__lead' : 'body body-secondary'}>{p}</p>)}
       </div>
     </div>
   </section>
@@ -152,12 +163,11 @@ const pillars = [
   .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(56px, 8vw, 104px); }
   .hero__grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 48px; align-items: center; }
   .hero__copy { display: grid; gap: 28px; justify-items: start; }
-  .hero__copy :global(.hero__quote) { animation: fade-up 800ms var(--r5-ease-out) both; }
+  .hero__kicker { animation: fade-up 800ms var(--r5-ease-out) both; }
   .hero__title { max-width: 13ch; font-size: clamp(40px, 5.6vw, var(--r5-h1)); }
   .hero__title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
   .hero__title .w > span { display: inline-block; animation: word-up 1000ms var(--r5-ease-out) both; animation-delay: calc(120ms + var(--w) * 90ms); }
   .hero__lead { max-width: 40ch; animation: fade-up 900ms var(--r5-ease-out) 520ms both; }
-  .hero__more { display: grid; gap: 14px; max-width: 52ch; margin-top: -8px; animation: fade-up 900ms var(--r5-ease-out) 580ms both; }
   .hero__cta { animation: fade-up 900ms var(--r5-ease-out) 640ms both; }
   .hero__status { animation: fade-up 900ms var(--r5-ease-out) 760ms both; }
   .hero__visual { position: relative; width: min(100%, 560px); justify-self: end; padding: 28px; animation: fade-in 1400ms var(--r5-ease) 200ms both; }
@@ -175,6 +185,18 @@ const pillars = [
 
   /* Proof */
   .proof__marquee { margin-top: 56px; }
+
+  /* Approach */
+  .approach__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px 64px; align-items: start; }
+  .approach__quote { display: grid; gap: 24px; }
+  .approach__quote :global(.kicker) { margin-bottom: 0; }
+  .approach__quote :global(.quote p) { font-size: var(--r5-h3); line-height: 1.3; color: var(--r5-charcoal); }
+  .approach__copy { display: grid; gap: 18px; max-width: 60ch; padding-top: 44px; }
+  .approach__lead { font-size: var(--r5-lead); line-height: var(--r5-lead-lh); }
+  @media (max-width: 900px) {
+    .approach__grid { grid-template-columns: 1fr; }
+    .approach__copy { padding-top: 0; }
+  }
 
   /* Pillar overviews (client copy) */
   .pillar-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; }
@@ -231,6 +253,6 @@ const pillars = [
   @media (max-width: 900px) { .book__grid { grid-template-columns: 1fr; gap: 40px; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero__title .w > span, .hero__copy :global(.hero__quote), .hero__lead, .hero__more, .hero__cta, .hero__status, .hero__visual { animation: none; }
+    .hero__title .w > span, .hero__kicker, .hero__lead, .hero__cta, .hero__status, .hero__visual { animation: none; }
   }
 </style>
