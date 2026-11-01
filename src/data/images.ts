@@ -110,4 +110,9 @@ export const images = {
     alt: "Financial papers and a pen spread across a desk",
     credit: "Unsplash", // https://unsplash.com/photos/a-wooden-table-topped-with-papers-and-a-pen
   },
+  cityAerial: {
+    src: 'https://images.unsplash.com/photo-1520425785126-a1fe4bfaf006',
+    alt: "An aerial view of the City of London's streets and rooftops",
+    credit: "Unsplash", // https://unsplash.com/photos/birds-eye-view-of-high-rise-buildings
+  },
 } as const;

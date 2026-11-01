@@ -1,0 +1,210 @@
+---
+// The 24-hour dial — the ring as a clock face for the Home hero.
+// Tracks London time live; one photo of the City is re-lit by the hour.
+// Drag the orange point (or use arrow keys) to scrub through the day; it
+// glides back to the live time when released. Hour labels sit OUTSIDE the
+// ring (compass logic) so it never reads as a target.
+import Img from './Img.astro';
+
+const C = 200;
+const R = 176;
+const f = (n: number) => n.toFixed(2);
+const ticks = Array.from({ length: 96 }, (_, i) => {
+  const a = (i / 96) * Math.PI * 2;
+  const hour = i % 4 === 0;
+  const r1 = R + 8;
+  const r2 = R + (hour ? (i % 24 === 0 ? 20 : 15) : 11);
+  return { x1: f(C + r1 * Math.sin(a)), y1: f(C - r1 * Math.cos(a)), x2: f(C + r2 * Math.sin(a)), y2: f(C - r2 * Math.cos(a)), hour };
+});
+const labels = [['00', 0], ['06', 90], ['12', 180], ['18', 270]].map(([t, deg]) => {
+  const a = ((deg as number) * Math.PI) / 180;
+  const r = R + 34;
+  return { t, x: f(C + r * Math.sin(a)), y: f(C - r * Math.cos(a) + 3) };
+});
+---
+<div class="dial" data-dial>
+  <div class="dial__photo">
+    <div class="dial__img" data-dial-img>
+      <Img image="cityAerial" eager sizes="(max-width: 900px) 80vw, 40vw" width={1200} height={1200} alt="An aerial view of the City of London’s streets and rooftops" />
+    </div>
+    <div class="dial__tint" data-dial-tint></div>
+    <div class="dial__warm" data-dial-warm></div>
+    <div class="dial__glow" data-dial-glow></div>
+  </div>
+
+  <svg class="dial__svg" viewBox="0 0 400 400" data-dial-svg aria-hidden="true">
+    {ticks.map((t) => <line class={t.hour ? 'dial__tick dial__tick--hour' : 'dial__tick'} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} />)}
+    {labels.map((l) => <text class="dial__label" x={l.x} y={l.y} text-anchor="middle">{l.t}</text>)}
+    <circle class="dial__track" cx={C} cy={C} r={R} />
+    <path class="dial__arc" data-dial-arc />
+    <g class="dial__handle" data-dial-handle>
+      <circle r="24" fill="transparent" />
+      <circle class="dial__halo" r="14" />
+      <circle class="dial__point" r="8" />
+    </g>
+  </svg>
+
+  <!-- Keyboard / screen-reader control for the same dial -->
+  <div class="sr-slider" tabindex="0" role="slider" aria-label="Time of day in London" aria-valuemin="0" aria-valuemax="1439" data-dial-slider></div>
+
+  <div class="dial__read micro" aria-live="off">
+    <span class="muted" data-dial-mode>LDN · Live</span>
+    <b data-dial-time>--:--</b>
+    <span class="muted" data-dial-shift>Day shift</span>
+  </div>
+</div>
+
+<style>
+  .dial { position: relative; aspect-ratio: 1; width: 100%; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .dial__photo { position: absolute; inset: 12%; border-radius: 50%; overflow: hidden; background: var(--r5-c-06); isolation: isolate; }
+  .dial__photo > div { position: absolute; inset: 0; }
+  .dial__img :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .dial__tint { mix-blend-mode: multiply; }
+  .dial__warm { mix-blend-mode: soft-light; }
+  .dial__glow { background: radial-gradient(circle at 50% 40%, transparent 35%, rgba(20, 28, 60, 0.45) 100%); opacity: 0; }
+
+  .dial__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; cursor: grab; }
+  .dial__svg:active { cursor: grabbing; }
+  .dial__tick { stroke: var(--r5-c-12); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .dial__tick--hour { stroke: var(--r5-c-45); }
+  .dial__label { font: 400 10px var(--r5-mono); letter-spacing: 0.06em; fill: var(--r5-text-secondary); }
+  .dial__track { fill: none; stroke: var(--r5-c-12); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .dial__arc { fill: none; stroke: var(--r5-charcoal); stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .dial__point { fill: var(--r5-accent); }
+  .dial__halo { fill: none; stroke: var(--r5-accent); stroke-width: 1.5; opacity: 0.4; transition: transform var(--r5-dur-base) var(--r5-ease-out); }
+  .dial__svg:hover .dial__halo, .dial[data-scrubbing] .dial__halo { transform: scale(1.35); }
+
+  .dial__read {
+    position: absolute; right: -4px; bottom: 8%; display: grid; gap: 2px;
+    padding: 10px 14px; border-radius: var(--r5-radius-sm);
+    background: var(--r5-white); box-shadow: inset 0 0 0 1px var(--r5-border);
+    font-variant-numeric: tabular-nums; pointer-events: none;
+  }
+  .dial__read b { font: 500 15px var(--r5-mono); letter-spacing: 0.02em; color: var(--r5-charcoal); }
+  .sr-slider { position: absolute; inset: 12%; border-radius: 50%; pointer-events: none; }
+  .sr-slider:focus-visible { outline: 2px solid var(--r5-accent); outline-offset: 6px; }
+  @media (max-width: 900px) { .dial__read { right: 0; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-dial]');
+  if (root) {
+    const svg = root.querySelector<SVGSVGElement>('[data-dial-svg]')!;
+    const arc = root.querySelector<SVGPathElement>('[data-dial-arc]')!;
+    const handle = root.querySelector<SVGGElement>('[data-dial-handle]')!;
+    const slider = root.querySelector<HTMLElement>('[data-dial-slider]')!;
+    const img = root.querySelector<HTMLElement>('[data-dial-img]')!;
+    const tint = root.querySelector<HTMLElement>('[data-dial-tint]')!;
+    const warm = root.querySelector<HTMLElement>('[data-dial-warm]')!;
+    const glow = root.querySelector<HTMLElement>('[data-dial-glow]')!;
+    const tEl = root.querySelector<HTMLElement>('[data-dial-time]')!;
+    const modeEl = root.querySelector<HTMLElement>('[data-dial-mode]')!;
+    const shiftEl = root.querySelector<HTMLElement>('[data-dial-shift]')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const C = 200, R = 176;
+
+    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    const londonMins = () => { const [h, m, s] = fmt.format(new Date()).split(':').map(Number); return h * 60 + m + s / 60; };
+    const pad = (n: number) => String(Math.floor(n)).padStart(2, '0');
+    const hhmm = (m: number) => `${pad((m / 60) % 24)}:${pad(m % 60)}`;
+    const isNight = (m: number) => m < 6 * 60 || m >= 20 * 60;
+
+    // Lighting by hour: [hour, exposure, saturation, multiply tint rgba, soft-light warmth rgba, vignette].
+    type Key = [number, number, number, number[], number[], number];
+    const LIGHT: Key[] = [
+      [0, 0.62, 0.55, [40, 62, 120, 0.55], [140, 170, 255, 0.18], 0.65],
+      [4.5, 0.64, 0.55, [40, 62, 120, 0.52], [140, 170, 255, 0.16], 0.6],
+      [6, 0.82, 0.72, [110, 104, 150, 0.28], [255, 170, 130, 0.4], 0.35],
+      [8, 0.96, 0.85, [255, 255, 255, 0], [255, 200, 150, 0.28], 0.1],
+      [12, 1.06, 0.95, [255, 255, 255, 0], [255, 230, 200, 0.1], 0],
+      [16, 1.0, 0.98, [255, 255, 255, 0], [255, 186, 110, 0.25], 0.1],
+      [18.5, 0.9, 1.05, [130, 90, 120, 0.18], [255, 140, 80, 0.5], 0.25],
+      [20, 0.74, 0.8, [70, 70, 130, 0.42], [255, 130, 90, 0.18], 0.5],
+      [22, 0.64, 0.6, [40, 62, 120, 0.52], [140, 170, 255, 0.16], 0.6],
+      [24, 0.62, 0.55, [40, 62, 120, 0.55], [140, 170, 255, 0.18], 0.65],
+    ];
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const mixRgba = (a: number[], b: number[], t: number) => a.map((v, i) => lerp(v, b[i], t));
+    const rgba = (c: number[]) => `rgba(${c.slice(0, 3).map(Math.round).join(',')},${c[3].toFixed(3)})`;
+
+    const light = (mins: number) => {
+      const h = (mins / 60) % 24;
+      let i = 0;
+      while (h > LIGHT[i + 1][0]) i++;
+      const [h0, b0, s0, t0, w0, v0] = LIGHT[i];
+      const [h1, b1, s1, t1, w1, v1] = LIGHT[i + 1];
+      const p = (h - h0) / (h1 - h0);
+      const e = p * p * (3 - 2 * p);
+      img.style.filter = `brightness(${lerp(b0, b1, e).toFixed(3)}) saturate(${lerp(s0, s1, e).toFixed(3)}) contrast(1.04)`;
+      tint.style.background = rgba(mixRgba(t0, t1, e));
+      warm.style.background = rgba(mixRgba(w0, w1, e));
+      glow.style.opacity = lerp(v0, v1, e).toFixed(3);
+    };
+
+    let mins = londonMins();
+    let scrubbing = false;
+    let gliding = false;
+    let returnTimer = 0;
+
+    const draw = (m: number) => {
+      const frac = (m % 1440) / 1440;
+      const a = frac * Math.PI * 2;
+      const x = C + R * Math.sin(a), y = C - R * Math.cos(a);
+      handle.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+      arc.setAttribute('d', frac < 0.0005 ? '' : `M ${C} ${C - R} A ${R} ${R} 0 ${frac > 0.5 ? 1 : 0} 1 ${x.toFixed(2)} ${y.toFixed(2)}`);
+      light(m);
+      tEl.textContent = hhmm(m);
+      shiftEl.textContent = isNight(m) ? 'Night shift' : 'Day shift';
+      slider.setAttribute('aria-valuenow', String(Math.round(m)));
+      slider.setAttribute('aria-valuetext', `${hhmm(m)}, ${isNight(m) ? 'night' : 'day'} shift`);
+    };
+
+    const fromPointer = (e: PointerEvent) => {
+      const b = svg.getBoundingClientRect();
+      const dx = e.clientX - (b.left + b.width / 2), dy = e.clientY - (b.top + b.height / 2);
+      let ang = Math.atan2(dx, -dy);
+      if (ang < 0) ang += Math.PI * 2;
+      return (ang / (Math.PI * 2)) * 1440;
+    };
+
+    const preview = () => { scrubbing = true; root.setAttribute('data-scrubbing', ''); modeEl.textContent = 'LDN · Preview'; window.clearTimeout(returnTimer); };
+    const backToLive = () => {
+      window.clearTimeout(returnTimer);
+      returnTimer = window.setTimeout(() => {
+        root.removeAttribute('data-scrubbing');
+        modeEl.textContent = 'LDN · Live';
+        scrubbing = false;
+        if (reduce) return;
+        gliding = true;
+        const from = mins;
+        const delta = ((londonMins() - from + 2160) % 1440) - 720;
+        const start = performance.now();
+        const step = (t: number) => {
+          const p = Math.min(1, (t - start) / 900), e = 1 - Math.pow(1 - p, 3);
+          mins = (from + delta * e + 1440) % 1440;
+          draw(mins);
+          if (p < 1) requestAnimationFrame(step); else gliding = false;
+        };
+        requestAnimationFrame(step);
+      }, 2200);
+    };
+
+    svg.addEventListener('pointerdown', (e) => { preview(); mins = fromPointer(e); draw(mins); svg.setPointerCapture(e.pointerId); });
+    svg.addEventListener('pointermove', (e) => { if (scrubbing && svg.hasPointerCapture(e.pointerId)) { mins = fromPointer(e); draw(mins); } });
+    svg.addEventListener('pointerup', backToLive);
+    svg.addEventListener('pointercancel', backToLive);
+    slider.addEventListener('keydown', (e) => {
+      const step = ({ ArrowRight: 15, ArrowUp: 15, ArrowLeft: -15, ArrowDown: -15, PageUp: 60, PageDown: -60 } as Record<string, number>)[e.key];
+      if (!step) return;
+      e.preventDefault();
+      preview();
+      mins = (mins + step + 1440) % 1440;
+      draw(mins);
+      backToLive();
+    });
+
+    draw(mins);
+    // Follow the live clock once a second (cheaper than every frame).
+    window.setInterval(() => { if (!scrubbing && !gliding) { mins = londonMins(); draw(mins); } }, 1000);
+  }
+</script>
