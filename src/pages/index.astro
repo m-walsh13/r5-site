@@ -155,7 +155,7 @@ const pillars = [
       <ul class="selected__grid" data-reveal>
         {selected.slice(1).map((c) => <li><CaseCard item={c} /></li>)}
       </ul>
-      <p class="selected__all"><a href={link('/case-studies/')} class="r5-link"><span>All case studies</span></a></p>
+      <div class="selected__all"><Button href={link('/case-studies/')} variant="ghost">All case studies</Button></div>
     </div>
   </section>
 
@@ -264,7 +264,7 @@ const pillars = [
   /* Selected work */
   .selected__featured { margin-bottom: 16px; }
   .selected__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .selected__all { margin-top: 32px; }
+  .selected__all { margin-top: 32px; display: flex; justify-content: center; }
   @media (max-width: 640px) { .selected__grid { grid-template-columns: 1fr; } }
 
   /* Book */

@@ -1,6 +1,7 @@
 ---
 // Consultancy & Intelligence — client copy. Order: overview + numbered menu ·
 // 5 services · How we work · Case study · Contact · FAQs (sitemap).
+import Button from '../components/Button.astro';
 import Base from '../layouts/Base.astro';
 import PillarHero from '../components/PillarHero.astro';
 import ServiceRail from '../components/ServiceRail.astro';
@@ -44,7 +45,7 @@ const schema = [
       <ul class="case-grid" data-reveal>
         {casesFor('consulting').slice(0, 3).map((c) => <li><CaseCard item={c} /></li>)}
       </ul>
-      <p class="case-all"><a href={link('/case-studies/')} class="r5-link"><span>All case studies</span></a></p>
+      <div class="case-all"><Button href={link('/case-studies/')} variant="ghost">All case studies</Button></div>
     </div>
   </section>
 
@@ -55,7 +56,7 @@ const schema = [
 
 <style>
   .case-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .case-all { margin-top: 32px; }
+  .case-all { margin-top: 32px; display: flex; justify-content: center; }
   @media (max-width: 1000px) { .case-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .case-grid { grid-template-columns: 1fr; } }
   .services-wrap { position: relative; }
