@@ -1,0 +1,95 @@
+---
+// Case studies — listing. Copy for the intro is ours (NOT CLIENT COPY);
+// the case studies themselves are the client's.
+import { link } from '../../lib/link';
+import Base from '../../layouts/Base.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import ContactBand from '../../components/ContactBand.astro';
+import { caseStudies } from '../../data/caseStudies';
+import { breadcrumbSchema } from '../../data/schema';
+
+const [featured, ...rest] = caseStudies;
+const filters = [
+  { value: 'all', label: 'All' },
+  { value: 'consulting', label: 'Consultancy & Intelligence' },
+  { value: 'operations', label: 'Security Operations' },
+];
+---
+<Base
+  title="Case Studies | R5 Global"
+  description="How R5 Global plans, deploys and delivers: security consultancy, penetration testing, investigations and SIA-licensed security operations, from galleries and live events to critical infrastructure."
+  schema={[breadcrumbSchema('Case studies', '/case-studies/')]}
+>
+  <section class="cs-hero" aria-labelledby="page-title">
+    <div class="container">
+      <nav class="cs-crumb micro" aria-label="Breadcrumb">
+        <a href={link('/')}>R5</a><span aria-hidden="true">/</span><span aria-current="page">Case studies</span>
+      </nav>
+      <div class="cs-hero__grid">
+        <div>
+          <p class="label accent">Case studies</p>
+          <h1 class="h1" id="page-title">Selected work.</h1>
+        </div>
+        <p class="lead">How we plan, deploy and deliver — from gallery openings and live events to critical infrastructure.</p>
+      </div>
+      <div class="cs-filter" role="group" aria-label="Filter case studies">
+        {filters.map((f, i) => (
+          <button type="button" class="cs-filter__btn" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={f.value}>{f.label}</button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section cs-list" aria-label="Case studies">
+    <div class="container">
+      <div class="cs-featured" data-reveal data-case-item={featured.line}>
+        <CaseCard item={featured} featured headingLevel="h2" />
+      </div>
+      <ul class="cs-grid" data-reveal>
+        {rest.map((c) => <li data-case-item={c.line}><CaseCard item={c} headingLevel="h2" /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand kicker="Get in touch" title="Tell us what you’re dealing with." />
+</Base>
+
+<style>
+  .cs-hero { padding: 28px 0 32px; }
+  .cs-crumb { display: flex; gap: 10px; color: var(--r5-text-secondary); margin-bottom: clamp(32px, 5vw, 64px); }
+  .cs-crumb a { text-decoration: none; }
+  .cs-hero__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 64px; align-items: end; }
+  .cs-hero__grid .label { margin-bottom: 20px; }
+  .cs-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 48px; }
+  .cs-filter__btn {
+    height: 40px; padding: 0 18px; border: 0; border-radius: var(--r5-pill);
+    background: transparent; box-shadow: inset 0 0 0 1px var(--r5-border);
+    font: 500 var(--r5-label)/1 var(--r5-mono); letter-spacing: var(--r5-label-ls); text-transform: uppercase;
+    transition: background-color var(--r5-dur-fast), color var(--r5-dur-fast);
+  }
+  .cs-filter__btn:hover { background: var(--r5-c-06); }
+  .cs-filter__btn[aria-pressed='true'] { background: var(--r5-charcoal); color: var(--r5-white); box-shadow: none; }
+  .cs-list { padding-top: 24px; }
+  .cs-featured { margin-bottom: 16px; }
+  .cs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  [data-case-item][hidden] { display: none; }
+  @media (max-width: 1000px) { .cs-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 900px) { .cs-hero__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .cs-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  // Filter by service line. "both" cases show under either filter.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-case-item]');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter!;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((el) => {
+        const line = el.dataset.caseItem!;
+        el.hidden = !(f === 'all' || line === f || line === 'both');
+      });
+    }),
+  );
+</script>

@@ -7,7 +7,9 @@ import ServiceRail from '../components/ServiceRail.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
 import CutRule from '../components/CutRule.astro';
 import SectionHead from '../components/SectionHead.astro';
-import CaseStudies from '../components/CaseStudies.astro';
+import CaseCard from '../components/CaseCard.astro';
+import { casesFor } from '../data/caseStudies';
+import { link } from '../lib/link';
 import ContactBand from '../components/ContactBand.astro';
 import Faqs from '../components/Faqs.astro';
 import Process from '../components/Process.astro';
@@ -77,8 +79,11 @@ const schema = [
 
   <section class="section" aria-labelledby="cases-title">
     <div class="container">
-      <SectionHead kicker={page.cases.kicker} title={page.cases.title} lead={page.cases.lead} id="cases-title" />
-      <CaseStudies item={page.cases.item} />
+      <SectionHead kicker={page.cases.kicker} title={page.cases.title} id="cases-title" />
+      <ul class="case-grid" data-reveal>
+        {casesFor('operations').slice(0, 3).map((c) => <li><CaseCard item={c} /></li>)}
+      </ul>
+      <p class="case-all"><a href={link('/case-studies/')} class="r5-link"><span>All case studies</span></a></p>
     </div>
   </section>
 
@@ -88,6 +93,10 @@ const schema = [
 </Base>
 
 <style>
+  .case-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .case-all { margin-top: 32px; }
+  @media (max-width: 1000px) { .case-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .case-grid { grid-template-columns: 1fr; } }
   .services-wrap { position: relative; }
   .always__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; }
   .always__deployed { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 40px; }

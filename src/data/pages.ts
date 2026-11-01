@@ -3,21 +3,7 @@
 //
 // Client-approved copy from "R5 Global Website Copy" (28 Oct 2026) where
 // supplied. Anything still ours is marked NOT CLIENT COPY.
-import type { ImageKey } from './images';
 import type { Quote } from './services';
-
-// One featured case study per service page — anonymous, sector and geography only.
-export type CaseStudy = {
-  ref: string;
-  sector: string;
-  title: string;
-  situation: string;
-  approach: string;
-  result: string;
-  service: string;
-  serviceId: string;
-  image: ImageKey;
-};
 
 export type Faq = { q: string; a: string };
 
@@ -194,23 +180,8 @@ export const consultingPage = {
     ],
   },
   cases: {
-    kicker: 'Case study',
-    title: 'Sector-led. No names.',
-    lead: 'A glimpse of the work. Details are kept deliberately thin — that is rather the point.',
-    item: {
-      ref: 'R5/021',
-      sector: 'Defence supplier, South East',
-      title: 'A restricted facility, tested before the audit.',
-      situation:
-        'A defence supplier needed to know whether a restricted area would stand up to scrutiny ahead of a compliance audit.',
-      approach:
-        'Under an agreed scope and written authorisation, our team attempted entry the way a real adversary would — through reception, deliveries and everyday staff routines — recording every step.',
-      result:
-        'A prioritised set of fixes, completed before the audit, and a clear picture of which controls were already doing their job.',
-      service: 'Physical Penetration Testing',
-      serviceId: 'physical-penetration-testing',
-      image: 'defence',
-    } satisfies CaseStudy,
+    kicker: 'Case studies',
+    title: 'Sector-led. Proven on the ground.',
   },
   contact: {
     kicker: 'Get in touch',
@@ -277,23 +248,8 @@ export const operationsPage = {
     },
   },
   cases: {
-    kicker: 'Case study',
-    title: 'Sector-led. No names.',
-    lead: 'The sites change; the standard does not.',
-    item: {
-      ref: 'R5/012',
-      sector: 'Hospitality, central London',
-      title: 'Front of house, rebuilt around one standard.',
-      situation:
-        'A hotel and restaurant group had security that varied from venue to venue, and from shift to shift.',
-      approach:
-        'We hand-selected SIA-licensed officers for each venue, briefed them on site-specific risks and put one briefing standard in place across the group.',
-      result:
-        'Consistent front of house security, one point of contact and clear reporting across every venue.',
-      service: 'Guarding & Asset Protection',
-      serviceId: 'guarding-asset-protection',
-      image: 'hospitality',
-    } satisfies CaseStudy,
+    kicker: 'Case studies',
+    title: 'Sector-led. Proven on the ground.',
   },
   contact: {
     kicker: 'Get in touch',

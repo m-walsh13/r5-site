@@ -34,7 +34,7 @@ the structure stays locked.
 ## Placeholders to replace before launch
 
 - **Copy** — client-approved copy (28 Oct 2026) is in. Anything still ours is marked `NOT CLIENT COPY` in `src/data/pages.ts` (FAQs, form headings, About facts/what-we-do/accreditations, SEO meta, 24/7 section).
-- **Case study** — one per service page, illustrative (tagged on-page). Replace with a real, anonymised engagement.
+- **Case studies** — client copy in (`src/data/caseStudies.ts`), listing at `/case-studies/` + one page each. Named clients need permission confirmed; images are Unsplash placeholders.
 - **Our people** — names, roles and bios in; headshots, surnames (Alannah, Gabriel) and LinkedIn links still to come.
 - **Reviews** — skeleton cards awaiting the Trustpilot / Google integration.
 - **Booking** — panel reserved for the chosen tool (Calendly / Cal.com / etc.).

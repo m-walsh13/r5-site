@@ -90,4 +90,24 @@ export const images = {
     alt: "A glass-walled corridor between offices in a corporate building",
     credit: "Unsplash", // https://unsplash.com/photos/glass-paneled-long-wooden-floored-hallway
   },
+  eventTrusses: {
+    src: 'https://images.unsplash.com/photo-1781459359076-a1e563cbc7b2',
+    alt: "Event staging trusses against an open sky",
+    credit: "Unsplash", // https://unsplash.com/photos/two-white-metal-trusses-with-chains-against-a-sky
+  },
+  westEnd: {
+    src: 'https://images.unsplash.com/photo-1610813328519-0ade655c40c1',
+    alt: "A curving West End street in central London on a clear day",
+    credit: "Unsplash", // https://unsplash.com/photos/red-and-black-bus-on-road-near-building-during-daytime
+  },
+  substation: {
+    src: 'https://images.unsplash.com/photo-1790994538837-6b20c2473b6d',
+    alt: "A secured gate in front of an electrical substation",
+    credit: "Unsplash", // https://unsplash.com/photos/a-chain-link-gate-with-geometric-metal-bars-in-front-of-an-electrical-substation
+  },
+  casePapers: {
+    src: 'https://images.unsplash.com/photo-1631651693480-97f1132e333d',
+    alt: "Financial papers and a pen spread across a desk",
+    credit: "Unsplash", // https://unsplash.com/photos/a-wooden-table-topped-with-papers-and-a-pen
+  },
 } as const;
