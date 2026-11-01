@@ -39,8 +39,8 @@ export const consulting: Service[] = [
       'Security policies, procedures and outsourced management',
       'Licensing support',
     ],
-    image: 'planning',
-    caption: 'Risk · understood before it’s managed',
+    image: 'officeCorridor',
+    caption: 'Premises · what’s working, where the gaps are',
   },
   {
     id: 'physical-penetration-testing',
@@ -100,8 +100,8 @@ export const consulting: Service[] = [
       'Regular briefings and tailored reporting',
     ],
     closer: 'A little notice can make a considerable difference.',
-    image: 'worldMap',
-    caption: 'Threat picture · watched, not guessed',
+    image: 'analyst',
+    caption: 'Briefings · relevant, checked, explained',
   },
   {
     id: 'technical-surveillance-countermeasures',
@@ -121,8 +121,8 @@ export const consulting: Service[] = [
       'Advice on protecting confidential conversations',
     ],
     closer: 'Private should mean private.',
-    image: 'meetingRoom',
-    caption: 'Meeting rooms · swept, not assumed',
+    image: 'boardroom',
+    caption: 'Boardrooms · swept, not assumed',
   },
 ];
 

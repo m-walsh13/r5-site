@@ -20,30 +20,10 @@ export const images = {
     alt: "A sunlit hotel lobby with a reception area",
     credit: "Zoshua Colah", // https://unsplash.com/photos/a-grand-hotel-lobby-filled-with-sunlight-SXePqzrArfY
   },
-  uhnw: {
-    src: 'https://images.unsplash.com/photo-1670589953882-b94c9cb380f5',
-    alt: "A modern private residence with a pool",
-    credit: "Salman Saqib", // https://unsplash.com/photos/a-building-with-a-pool-z6UAWpQAhXs
-  },
-  sensitiveInvestigations: {
-    src: 'https://images.unsplash.com/photo-1583521214690-73421a1829a9',
-    alt: "Stacks of paper files and folders",
-    credit: "Wesley Tingey", // https://unsplash.com/photos/stacks-of-paper-documents-and-file-folders-snNHKZ-mGfE
-  },
   media: {
     src: 'https://images.unsplash.com/photo-1651465531201-7e430660fd82',
     alt: "A broadcast studio with cameras and lighting rigs",
     credit: "Brad Weaver", // https://unsplash.com/photos/a-room-with-a-camera-and-equipment-qhamVJdrkRs
-  },
-  activist: {
-    src: 'https://images.unsplash.com/photo-1783196721433-b164299aaddf',
-    alt: "The glass-fronted entrance of a corporate headquarters",
-    credit: "David Klein", // https://unsplash.com/photos/a-modern-building-with-glass-facade-and-grand-staircases-J6NuCvwbARc
-  },
-  retail: {
-    src: 'https://images.unsplash.com/photo-1783700085825-1df197a49f40',
-    alt: "A quiet, modern retail interior",
-    credit: "ULISES RAMIREZ", // https://unsplash.com/photos/modern-empty-interior-with-wooden-furniture-and-concrete-walls-A1bMeaftZi4
   },
   construction: {
     src: 'https://images.unsplash.com/photo-1655975719898-8f3432eed322',
@@ -65,11 +45,6 @@ export const images = {
     alt: "A marble reception desk in a corporate lobby",
     credit: "Random Institute", // https://unsplash.com/photos/white-and-brown-table-FDcydLvV7Io
   },
-  planning: {
-    src: 'https://images.unsplash.com/photo-1603901622056-0a5bee231395',
-    alt: "Architectural plans with drafting tools on a desk",
-    credit: "Lucas Kepner", // https://unsplash.com/photos/architectural-blueprints-with-drafting-tools-Yn8D5B8C-eY
-  },
   accessControl: {
     src: 'https://images.unsplash.com/photo-1636770192011-3df8d0c1436d',
     alt: "A card reader mounted beside a secure steel door",
@@ -85,26 +60,6 @@ export const images = {
     alt: "An open drawer of a filing cabinet",
     credit: "Maksym Kaharlytskyi", // https://unsplash.com/photos/file-cabinet-Q9y3LRuuxmg
   },
-  worldMap: {
-    src: 'https://images.unsplash.com/photo-1524661135-423995f22d0b',
-    alt: "A world map",
-    credit: "Andrew Stutesman", // https://unsplash.com/photos/blue-green-and-yellow-world-map-l68Z6eF2peA
-  },
-  warehouse: {
-    src: 'https://images.unsplash.com/photo-1644079446600-219068676743',
-    alt: "A long warehouse aisle lined with racking",
-    credit: "Lance Chang", // https://unsplash.com/photos/a-large-warehouse-filled-with-lots-of-shelves-h3pVxOIpnzk
-  },
-  port: {
-    src: 'https://images.unsplash.com/photo-1678182451047-196f22a4143e',
-    alt: "Shipping containers stacked at a container port",
-    credit: "Ali Mkumbwa", // https://unsplash.com/photos/a-large-amount-of-containers-are-stacked-on-top-of-each-other-Annl9CjEaEs
-  },
-  mapPins: {
-    src: 'https://images.unsplash.com/photo-1619468129361-605ebea04b44',
-    alt: "A hand placing a pin on a city map",
-    credit: "GeoJango Maps", // https://unsplash.com/photos/person-placing-red-pin-on-city-map-Z8UgB80_46w
-  },
   lobby: {
     src: 'https://images.unsplash.com/photo-1768270181430-3e3672a32283',
     alt: "A modern office lobby with marble floors",
@@ -115,29 +70,24 @@ export const images = {
     alt: "A gallery hung with valuable paintings",
     credit: "Neon Wang", // https://unsplash.com/photos/a-room-with-a-lot-of-paintings-on-the-walls-PmF9EcHvFB0
   },
-  executiveCar: {
-    src: 'https://images.unsplash.com/photo-1764090317825-9b76e437c8d8',
-    alt: "A black executive saloon parked at the kerb",
-    credit: "Ilya Godze", // https://unsplash.com/photos/a-black-luxury-sedan-parked-on-the-roadside-vp9A1TJ9KoY
-  },
-  londonStreet: {
-    src: 'https://images.unsplash.com/photo-1658658000582-1ee91a498fa1',
-    alt: "A curved London high street in daylight",
-    credit: "Thomas Konings", // https://unsplash.com/photos/a-red-bus-on-the-street-7uV0rCUZS3I
-  },
   londonAerial: {
     src: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad',
     alt: "An aerial view of London and the Thames",
     credit: "Benjamin Davies", // https://unsplash.com/photos/aerial-photography-of-london-skyline-during-daytime-Oja2ty_9ZLM
   },
-  meetingRoom: {
-    src: 'https://images.unsplash.com/photo-1464029902023-f42eba355bde',
-    alt: "A quiet meeting room overlooking the city",
-    credit: "Alexander Pemberton", // https://unsplash.com/photos/orange-fabric-padded-armchair-with-black-metal-base-near-round-clear-glass-top-table-and-gray-sofa-skLqGtLrYKc
-  },
   londonDusk: {
     src: 'https://images.unsplash.com/photo-1654457949106-d4f818c49536',
     alt: "The London skyline at dusk",
     credit: "Andrea De Santis", // https://unsplash.com/photos/a-view-of-a-city-at-sunset-with-boats-in-the-water-onNuFFz3L_E
+  },
+  boardroom: {
+    src: 'https://images.unsplash.com/photo-1571624436279-b272aff752b5',
+    alt: "A bright meeting room with a wooden boardroom table and chairs",
+    credit: "Unsplash", // https://unsplash.com/photos/brown-wooden-9-piece-office-table-and-chairs-1RT4txDDAbM
+  },
+  officeCorridor: {
+    src: 'https://images.unsplash.com/photo-1554232456-8727aae0cfa4',
+    alt: "A glass-walled corridor between offices in a corporate building",
+    credit: "Unsplash", // https://unsplash.com/photos/glass-paneled-long-wooden-floored-hallway
   },
 } as const;
